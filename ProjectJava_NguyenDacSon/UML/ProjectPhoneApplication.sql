@@ -39,4 +39,4 @@ create table Invoice_detail(
     foreign key (product_id) references Product(id),
     quantity int not null,
     unit_price decimal(12, 2) not null
-)
+);
