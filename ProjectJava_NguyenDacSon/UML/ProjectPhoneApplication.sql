@@ -40,3 +40,23 @@ create table Invoice_detail(
     quantity int not null,
     unit_price decimal(12, 2) not null
 );
+
+DELIMITER //
+-- ProductService
+create procedure display_all_product()
+begin
+    select * from product;
+end;
+
+create procedure add_product(
+    name_in varchar(100),
+    brand_in varchar(100),
+    price_in decimal(12, 2),
+    stock_in int
+)
+begin
+    insert into product(name, brand, price, stock)
+        values (name_in, brand_in, price_in, stock_in);
+end;
+DELIMITER //
+
