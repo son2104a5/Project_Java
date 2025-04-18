@@ -1,7 +1,6 @@
 package ra.edu.business.model;
 
-import ra.edu.validate.ProductValidator;
-import ra.edu.validate.Validator;
+import ra.edu.validate.objectValidator.ProductValidator;
 
 import java.util.Scanner;
 
@@ -72,7 +71,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "|" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", brand='" + brand + '\'' +

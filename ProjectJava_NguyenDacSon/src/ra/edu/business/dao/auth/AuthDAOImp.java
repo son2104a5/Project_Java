@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 public class AuthDAOImp implements AuthDAO {
 
     @Override
-    public Admin getByUsernameAndPassword(String username, String password) {
+    public Admin login(String username, String password) {
         String sql = "SELECT * FROM Admin WHERE username = ? AND password = ?";
 
         try (Connection conn = ConnectionDB.getConnection();

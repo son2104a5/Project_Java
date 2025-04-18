@@ -1,6 +1,7 @@
 package ra.edu;
 
 import ra.edu.presentation.LoginUI;
+import ra.edu.presentation.MainUI;
 
 import java.util.Scanner;
 
@@ -21,6 +22,9 @@ public class MainApplication {
                 case 2:
                     System.out.println("Cảm ơn bạn đã sử dụng chương trình.");
                     System.exit(0);
+                default:
+                    System.out.println("Chức năng không hợp lê, vui lòng nhập lại");
+                    break;
             }
         } while (true);
     }

@@ -4,6 +4,8 @@ import ra.edu.business.dao.product.ProductDAO;
 import ra.edu.business.dao.product.ProductDAOImp;
 import ra.edu.business.model.Product;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.util.List;
 
 public class ProductServiceImp implements ProductService {
@@ -12,7 +14,6 @@ public class ProductServiceImp implements ProductService {
     public ProductServiceImp() {
         productDAO = new ProductDAOImp();
     }
-
 
     @Override
     public List<Product> findAll() {
@@ -26,11 +27,31 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public boolean update(Product product) {
-        return false;
+        return productDAO.update(product);
     }
 
     @Override
     public boolean delete(Product product) {
-        return false;
+        return productDAO.delete(product);
+    }
+
+    @Override
+    public Product findProductById(int id) {
+        return productDAO.findProductById(id);
+    }
+
+    @Override
+    public List<Product> findProductByBrand(String value) {
+        return null;
+    }
+
+    @Override
+    public List<Product> findProductByPriceAmount(Double value1, Double value2) {
+        return List.of();
+    }
+
+    @Override
+    public List<Product> findProductByStockRange(int value1, int value2) {
+        return List.of();
     }
 }
