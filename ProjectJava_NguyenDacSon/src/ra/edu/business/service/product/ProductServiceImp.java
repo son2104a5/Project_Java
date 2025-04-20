@@ -42,16 +42,16 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<Product> findProductByBrand(String value) {
-        return null;
+        return productDAO.findProductByBrand(value);
     }
 
     @Override
     public List<Product> findProductByPriceAmount(Double value1, Double value2) {
-        return List.of();
+        return productDAO.findProductByPriceAmount(value1, value2);
     }
 
     @Override
     public List<Product> findProductByStockRange(int value1, int value2) {
-        return List.of();
+        return productDAO.findProductByStockRange(value1, value2);
     }
 }

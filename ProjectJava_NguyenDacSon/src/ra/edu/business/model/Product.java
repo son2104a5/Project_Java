@@ -1,7 +1,9 @@
 package ra.edu.business.model;
 
+import ra.edu.validate.objectValidator.InputValidator;
 import ra.edu.validate.objectValidator.ProductValidator;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Product {
@@ -10,6 +12,12 @@ public class Product {
     private String brand;
     private Double price;
     private int stock;
+
+    public static int idWidth = "ID".length();
+    public static int nameWidth = "Tên sản phẩm".length();
+    public static int brandWidth = "Nhãn hàng".length();
+    public static int priceWidth = "Giá".length();
+    public static int stockWidth = "Tồn kho".length();
 
     public Product() {
     }
@@ -62,21 +70,22 @@ public class Product {
         this.stock = stock;
     }
 
-    public void inputData(Scanner scanner) {
-        name = ProductValidator.validateInputValue(scanner, "Nhập tên sản phẩm:", String.class);
-        brand = ProductValidator.validateInputValue(scanner, "Nhập nhãn hiệu: ", String.class);
-        price = ProductValidator.validateInputValue(scanner, "Nhập giá sản phẩm:", Double.class);
-        stock = ProductValidator.validateInputValue(scanner, "Nhập tồn kho: ", Integer.class);
+    public void inputData(Scanner scanner, List<Product> productList) {
+        do {
+            name = InputValidator.validateInputValue(scanner, "Nhập tên sản phẩm:", String.class);
+        } while (ProductValidator.validateHasExistValue(name, productList));
+        brand = InputValidator.validateInputValue(scanner, "Nhập nhãn hiệu: ", String.class);
+        do {
+            price = InputValidator.validateInputValue(scanner, "Nhập giá sản phẩm:", Double.class);
+        } while (ProductValidator.validateDataHasNotPositiveValue(price));
+        do {
+            stock = InputValidator.validateInputValue(scanner, "Nhập số lượng tồn kho:", Integer.class);
+        } while (ProductValidator.validateDataHasNotPositiveValue(stock));
     }
 
     @Override
     public String toString() {
-        return "|" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", brand='" + brand + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                '}';
+        return String.format("| %-" + idWidth + "d | %-" + nameWidth + "s | %-" + brandWidth + "s | %" + priceWidth + ".2f | %-" + stockWidth + "d |",
+                id, name, brand, price, stock);
     }
 }

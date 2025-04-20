@@ -4,7 +4,7 @@ public class DoubleValidator implements TypeValidator<Double> {
     @Override
     public boolean isValid(String value) {
         try {
-            Integer.parseInt(value);
+            Double.parseDouble(value);
             return true;
         } catch (Exception e) {
             return false;

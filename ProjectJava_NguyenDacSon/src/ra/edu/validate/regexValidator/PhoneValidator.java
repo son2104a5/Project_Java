@@ -8,7 +8,7 @@ public class PhoneValidator {
     private static final String PHONE_MOBIFONE_PREFIXES = "070|079|077|076|078|089|090|093";
 
     public static boolean isValidPhoneNumberVN(String value) {
-        String phoneRegex = "(" + PHONE_VIETTEL_PREFIXES + "|" + PHONE_VINAPHONE_PREFIXES +  "|" + PHONE_MOBIFONE_PREFIXES + ")";
+        String phoneRegex = "^((" + PHONE_VIETTEL_PREFIXES + "|" + PHONE_VINAPHONE_PREFIXES + "|" + PHONE_MOBIFONE_PREFIXES + "))\\d{7}$";
         return value != null && Pattern.matches(phoneRegex, value.trim());
     }
 }

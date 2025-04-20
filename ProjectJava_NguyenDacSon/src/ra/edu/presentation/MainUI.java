@@ -1,5 +1,7 @@
 package ra.edu.presentation;
 
+import ra.edu.validate.objectValidator.InputValidator;
+
 import java.util.Scanner;
 
 public class MainUI {
@@ -11,14 +13,14 @@ public class MainUI {
                     "3. Quản lí hóa đơn\n" +
                     "4. Thống kê doanh thu\n" +
                     "5. Đăng xuất\n" +
-                    "====================================\n");
-            System.out.print("Chọn chức năng: ");
-            int choice = Integer.parseInt(scanner.nextLine());
+                    "====================================");
+            int choice = InputValidator.validateInputValue(scanner, "Chọn chức năng: ", Integer.class);
             switch (choice) {
                 case 1:
                     ProductUI.display(scanner);
                     break;
                 case 2:
+                    CustomerUI.display(scanner);
                     break;
                 case 3:
                     break;

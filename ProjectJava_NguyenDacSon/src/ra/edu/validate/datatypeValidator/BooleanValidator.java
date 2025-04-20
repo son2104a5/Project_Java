@@ -4,7 +4,7 @@ public class BooleanValidator implements TypeValidator<Boolean> {
     @Override
     public boolean isValid(String value) {
         try {
-            Integer.parseInt(value);
+            Boolean.parseBoolean(value);
             return true;
         } catch (Exception e) {
             return false;

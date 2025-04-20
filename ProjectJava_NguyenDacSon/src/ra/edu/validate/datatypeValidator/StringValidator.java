@@ -12,6 +12,6 @@ public class StringValidator implements TypeValidator<String> {
 
     @Override
     public String parse(String value) {
-        return "";
+        return value;
     }
 }

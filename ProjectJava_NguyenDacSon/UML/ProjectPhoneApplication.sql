@@ -1,48 +1,53 @@
 create database Project_Phone_Application;
 use Project_Phone_Application;
 
-create table Admin(
-    id int primary key auto_increment,
-    username varchar(50) not null unique,
+create table Admin
+(
+    id       int primary key auto_increment,
+    username varchar(50)  not null unique,
     password varchar(255) not null
 );
 
-create table Product(
-    id int primary key auto_increment,
-    name varchar(100) not null,
-    brand varchar(50) not null,
+create table Product
+(
+    id    int primary key auto_increment,
+    name  varchar(100)   not null,
+    brand varchar(50)    not null,
     price decimal(12, 2) not null,
-    stock int not null
+    stock int            not null
 );
 
-create table Customer(
-    id int primary key auto_increment,
-    name varchar(100) not null,
-    phone varchar(20),
-    email varchar(100) unique,
+create table Customer
+(
+    id      int primary key auto_increment,
+    name    varchar(100) not null,
+    phone   varchar(20),
+    email   varchar(100) unique,
     address varchar(255)
 );
 
-create table Invoice(
-    id int primary key auto_increment,
-    customer_id int,
+create table Invoice
+(
+    id           int primary key auto_increment,
+    customer_id  int,
     foreign key (customer_id) references Customer (id),
-    created_at  datetime default current_timestamp,
+    created_at   datetime default current_timestamp,
     total_amount decimal(12, 2) not null
 );
 
-create table Invoice_detail(
-    id int primary key auto_increment,
+create table Invoice_detail
+(
+    id         int primary key auto_increment,
     invoice_id int,
-    foreign key (invoice_id) references Invoice(id),
+    foreign key (invoice_id) references Invoice (id),
     product_id int,
-    foreign key (product_id) references Product(id),
-    quantity int not null,
+    foreign key (product_id) references Product (id),
+    quantity   int            not null,
     unit_price decimal(12, 2) not null
 );
 
-DELIMITER //
 -- ProductService
+DELIMITER //
 create procedure display_all_product()
 begin
     select * from product;
@@ -56,7 +61,7 @@ create procedure add_product(
 )
 begin
     insert into product(name, brand, price, stock)
-        values (name_in, brand_in, price_in, stock_in);
+    values (name_in, brand_in, price_in, stock_in);
 end;
 
 create procedure find_product_by_id(
@@ -72,7 +77,8 @@ create procedure update_product_name(
 )
 begin
     update product
-        set name = name_in where id = id_in;
+    set name = name_in
+    where id = id_in;
 end;
 
 create procedure update_product_brand(
@@ -81,7 +87,8 @@ create procedure update_product_brand(
 )
 begin
     update product
-    set brand = brand_in where id = id_in;
+    set brand = brand_in
+    where id = id_in;
 end;
 
 create procedure update_product_price(
@@ -90,7 +97,8 @@ create procedure update_product_price(
 )
 begin
     update product
-    set price = price_in where id = id_in;
+    set price = price_in
+    where id = id_in;
 end;
 
 create procedure update_product_stock(
@@ -99,7 +107,8 @@ create procedure update_product_stock(
 )
 begin
     update product
-    set stock = stock_in where id = id_in;
+    set stock = stock_in
+    where id = id_in;
 end;
 
 create procedure delete_product(
@@ -133,3 +142,78 @@ begin
 end;
 DELIMITER //
 
+-- CustomerService
+DELIMITER //
+create procedure display_all_customer()
+begin
+    select * from customer;
+end;
+
+create procedure find_customer_by_id(
+    id_in int
+)
+begin
+    select * from customer where id = id_in;
+end;
+
+create procedure add_customer(
+    name_in varchar(100),
+    phone_in varchar(100),
+    email_in varchar(100),
+    address_in varchar(100)
+)
+begin
+    insert into customer(name, phone, email, address)
+    values (name_in, phone_in, email_in, address_in);
+end;
+
+create procedure update_customer_name(
+    id_in int,
+    name_in varchar(100)
+)
+begin
+    update customer
+    set name = name_in
+    where id = id_in;
+end;
+
+create procedure update_customer_phone(
+    id_in int,
+    phone_in varchar(100)
+)
+begin
+    update customer
+    set phone = phone_in
+    where id = id_in;
+end;
+
+create procedure update_customer_email(
+    id_in int,
+    email_in varchar(100)
+)
+begin
+    update customer
+    set email = email_in
+    where id = id_in;
+end;
+
+create procedure update_customer_address(
+    id_in int,
+    address_in varchar(100)
+)
+begin
+    update customer
+    set address = address_in
+    where id = id_in;
+end;
+
+create procedure delete_customer(
+    id_in int
+)
+begin
+    delete from customer where id = id_in;
+end;
+DELIMITER //
+
+call update_product_stock(2, 80);
+select * from product where id = 2;

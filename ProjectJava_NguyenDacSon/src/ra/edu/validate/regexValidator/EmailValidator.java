@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class EmailValidator {
     public static boolean isValidEmail(String value) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
         return value != null && Pattern.matches(emailRegex, value.trim());
     }
 }

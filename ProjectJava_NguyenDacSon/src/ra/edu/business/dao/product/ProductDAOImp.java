@@ -65,29 +65,35 @@ public class ProductDAOImp implements ProductDAO {
     public boolean update(Product product) {
         Connection conn = null;
         CallableStatement cs = null;
+        System.out.println(product);
         try {
             conn = ConnectionDB.getConnection();
+            conn.setAutoCommit(true);
 
             if (product.getName() != null) {
                 cs = conn.prepareCall("{call update_product_name(?, ?)}");
                 cs.setInt(1, product.getId());
                 cs.setString(2, product.getName());
-            } else if (product.getBrand() != null) {
+                cs.executeUpdate();
+            }
+            if (product.getBrand() != null) {
                 cs = conn.prepareCall("{call update_product_brand(?, ?)}");
                 cs.setInt(1, product.getId());
                 cs.setString(2, product.getBrand());
-            } else if (product.getPrice() != null) {
+                cs.executeUpdate();
+            }
+            if (product.getPrice() != null) {
                 cs = conn.prepareCall("{call update_product_price(?, ?)}");
                 cs.setInt(1, product.getId());
                 cs.setDouble(2, product.getPrice());
-            } else if (product.getStock() > 0) {
+                cs.executeUpdate();
+            }
+            if (product.getStock() > 0) {
                 cs = conn.prepareCall("{call update_product_stock(?, ?)}");
                 cs.setInt(1, product.getId());
                 cs.setInt(2, product.getStock());
-            } else {
-                return false;
+                cs.executeUpdate();
             }
-            cs.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -152,7 +158,7 @@ public class ProductDAOImp implements ProductDAO {
     public List<Product> findProductByBrand(String value) {
         Connection conn = null;
         CallableStatement cs = null;
-        List<Product> products = null;
+        List<Product> products = new ArrayList<>();
         try {
             conn = ConnectionDB.getConnection();
             cs = conn.prepareCall("{call find_product_by_brand(?)}");
@@ -181,7 +187,7 @@ public class ProductDAOImp implements ProductDAO {
     public List<Product> findProductByPriceAmount(Double value1, Double value2) {
         Connection conn = null;
         CallableStatement cs = null;
-        List<Product> products = null;
+        List<Product> products = new ArrayList<>();
         try {
             conn = ConnectionDB.getConnection();
             cs = conn.prepareCall("{call find_product_by_price_amount(?, ?)}");
@@ -211,7 +217,7 @@ public class ProductDAOImp implements ProductDAO {
     public List<Product> findProductByStockRange(int value1, int value2) {
         Connection conn = null;
         CallableStatement cs = null;
-        List<Product> products = null;
+        List<Product> products = new ArrayList<>();
         try {
             conn = ConnectionDB.getConnection();
             cs = conn.prepareCall("{call find_product_by_stock_amount(?, ?)}");
