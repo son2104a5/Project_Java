@@ -23,14 +23,16 @@ public class MainUI {
                     CustomerUI.display(scanner);
                     break;
                 case 3:
+                    InvoiceUI.display(scanner);
                     break;
                 case 4:
+                    StatisticUI.display(scanner);
                     break;
                 case 5:
                     System.out.println("Đã thoát chương trình.");
                     return;
                 default:
-                    System.out.println("Chức năng không hợp lê, vui lòng nhập lại");
+                    System.err.println("Lựa chọn của bạn không hợp lê, vui lòng nhập lại");
                     break;
             }
         } while (true);

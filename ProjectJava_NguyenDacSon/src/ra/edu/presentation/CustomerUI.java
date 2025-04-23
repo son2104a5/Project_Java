@@ -3,6 +3,7 @@ package ra.edu.presentation;
 import ra.edu.business.model.Customer;
 import ra.edu.business.service.customer.CustomerService;
 import ra.edu.business.service.customer.CustomerServiceImp;
+import ra.edu.utils.Color;
 import ra.edu.utils.TableCustomerUtil;
 import ra.edu.validate.objectValidator.CustomerValidator;
 import ra.edu.validate.objectValidator.InputValidator;
@@ -37,7 +38,7 @@ public class CustomerUI {
                 case 3 -> customerUI.updateCustomer(scanner);
                 case 4 -> customerUI.deleteCustomer(scanner);
                 case 5 -> {
-                    System.out.println("Thoát menu khách hàng.....");
+                    System.out.println(Color.GREEN + "Thoát menu khách hàng....." + Color.RESET);
                     return;
                 }
                 default -> System.err.println("Lựa chọn của bạn không hợp lệ, vui lòng nhập lại");
@@ -49,6 +50,7 @@ public class CustomerUI {
         List<Customer> customers = customerService.findAll();
         if (customers.isEmpty()) {
             System.err.println("Không có khách hàng, vui lòng thêm khách hàng trước");
+            return;
         }
 
         TableCustomerUtil.printCustomerTableHeader(customers, "DANH SÁCH CÁC KHÁCH HÀNG HIỆN CÓ");
@@ -57,8 +59,7 @@ public class CustomerUI {
     }
 
     public void createCustomers(Scanner scanner) {
-        System.out.print("Nhập số khách hàng muốn thêm: ");
-        int n = Integer.parseInt(scanner.nextLine());
+        int n = InputValidator.validateInputValue(scanner, "Nhập số khách hàng muốn thêm: ", Integer.class);
         List<Customer> customers = customerService.findAll();
         for (int i = 0; i < n; i++) {
             Customer customer = new Customer();
@@ -67,13 +68,12 @@ public class CustomerUI {
 
             if (success) {
                 displayCustomers();
-            } else System.err.println("Có lỗi xảy ra trong quá trình thêm mới!");
+            } else System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
         }
     }
 
     public void updateCustomer(Scanner scanner) {
-        System.out.print("Nhập ID khách hàng cần tìm: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = InputValidator.validateInputValue(scanner, "Nhập ID khách hàng cần tìm: ", Integer.class);
         int choice;
         List<Customer> customers = customerService.findAll();
         Customer oldCustomer = customerService.findCustomerByID(id);
@@ -119,8 +119,8 @@ public class CustomerUI {
                         updateCustomer.setAddress(value);
                         updated = true;
                     }
-                    case 0 -> System.out.println("Thoát menu cập nhật.....");
-                    default -> System.out.println("Giá trị không hợp lệ, vui lòng nhập lại");
+                    case 0 -> System.out.println(Color.GREEN + "Thoát menu cập nhật....." + Color.RESET);
+                    default -> System.err.println("Giá trị không hợp lệ, vui lòng nhập lại");
                 }
 
                 if (updated) {
@@ -134,11 +134,8 @@ public class CustomerUI {
         }
     }
 
-
-
     public void deleteCustomer(Scanner scanner) {
-        System.out.print("Nhập ID khách hàng cần xóa: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = InputValidator.validateInputValue(scanner, "Nhập ID khách hàng cần xóa: ", Integer.class);
 
         if (customerService.findCustomerByID(id) != null) {
             Customer customer = new Customer();
@@ -147,7 +144,7 @@ public class CustomerUI {
             if (success) {
                 displayCustomers();
             } else {
-                System.err.println("Có lỗi trong quá trình thực hiện");
+                System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
             }
         } else {
             System.err.println("Không tìm thấy khách hàng có ID " + id + ".");

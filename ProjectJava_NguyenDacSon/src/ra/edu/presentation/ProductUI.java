@@ -3,6 +3,7 @@ package ra.edu.presentation;
 import ra.edu.business.model.Product;
 import ra.edu.business.service.product.ProductService;
 import ra.edu.business.service.product.ProductServiceImp;
+import ra.edu.utils.Color;
 import ra.edu.utils.TableProductUtil;
 import ra.edu.validate.objectValidator.InputValidator;
 import ra.edu.validate.objectValidator.ProductValidator;
@@ -41,10 +42,11 @@ public class ProductUI {
                 case 6 -> productUI.findProductsByPriceAmount(scanner);
                 case 7 -> productUI.findProductsByStockRange(scanner);
                 case 8 -> {
-                    System.out.println("Thoát menu quản lí sản phẩm...");
+                    System.out.println(Color.GREEN + "Thoát menu quản lí sản phẩm..." + Color.RESET);
                     return;
                 }
                 default -> {
+                    System.err.println("Lựa chọn của bạn không hợp lê, vui lòng nhập lại");
                 }
             }
         } while (true);
@@ -74,7 +76,7 @@ public class ProductUI {
             if (success) {
                 displayProducts();
             } else {
-                System.err.println("Có lỗi xảy ra trong quá trình thêm mới!");
+                System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
             }
         }
     }
@@ -139,7 +141,7 @@ public class ProductUI {
                     if (success) {
                         displayProducts();
                     } else {
-                        System.err.println("Có lỗi xảy ra trong quá trình cập nhật");
+                        System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
                     }
                 }
             } while (choice != 0);
@@ -159,7 +161,7 @@ public class ProductUI {
             if (success) {
                 displayProducts();
             } else {
-                System.err.println("Có lỗi trong quá trình thực hiện");
+                System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
             }
         } else {
             System.err.println("Không tìm thấy sản phẩm có ID: " + id + ".");

@@ -1,6 +1,7 @@
 package ra.edu.validate.objectValidator;
 
 import ra.edu.business.model.Customer;
+import ra.edu.utils.Color;
 import ra.edu.validate.regexValidator.EmailValidator;
 import ra.edu.validate.regexValidator.PhoneValidator;
 
@@ -9,7 +10,7 @@ import java.util.Scanner;
 
 public class CustomerValidator {
     public static String validateEmail(Scanner scanner, String message) {
-        System.out.println(message);
+        System.out.println(Color.YELLOW + message + Color.RESET);
         while (true) {
             String value = scanner.nextLine().trim();
             if (value.isEmpty()) {
@@ -24,9 +25,13 @@ public class CustomerValidator {
     }
 
     public static String validatePhone(Scanner scanner, String message) {
-        System.out.println(message);
+        System.out.println(Color.YELLOW + message + Color.RESET);
         while (true) {
             String value = scanner.nextLine().trim();
+            if (value.isEmpty()) {
+                System.err.println("Số điện thoại không được để trống!");
+                continue;
+            }
             if (PhoneValidator.isValidPhoneNumberVN(value)) {
                 return value;
             }

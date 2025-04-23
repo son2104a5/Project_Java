@@ -2,7 +2,7 @@ package ra.edu.presentation;
 
 import ra.edu.business.service.auth.AuthService;
 import ra.edu.business.service.auth.AuthServiceImp;
-import ra.edu.validate.objectValidator.AuthValidator;
+import ra.edu.utils.Color;
 
 import java.util.Scanner;
 
@@ -10,7 +10,7 @@ public class LoginUI {
     public static void display(Scanner sc) {
         AuthService authService = new AuthServiceImp();
         do {
-            System.out.println("========= ĐĂNG NHÂP ADMIN ========");
+            System.out.println("========= ĐĂNG NHẬP ADMIN ========");
             System.out.print("Tài khoản: ");
             String username = sc.nextLine();
             System.out.print("Mật khẩu: ");
@@ -20,11 +20,11 @@ public class LoginUI {
             boolean isLoginSuccess = authService.login(username, password);
 
             if (isLoginSuccess) {
-                System.out.println("Đăng nhập thành công!");
+                System.out.println(Color.GREEN + "Đăng nhập thành công!" + Color.RESET);
                 MainUI.display(sc);
                 return;
             } else {
-                AuthValidator.validateLogin();
+                System.err.println("Sai username hoặc password!");
             }
         } while (true);
     }

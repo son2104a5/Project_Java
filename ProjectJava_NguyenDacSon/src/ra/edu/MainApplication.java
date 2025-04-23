@@ -1,6 +1,7 @@
 package ra.edu;
 
 import ra.edu.presentation.LoginUI;
+import ra.edu.utils.Color;
 import ra.edu.validate.objectValidator.InputValidator;
 
 import java.io.IOException;
@@ -20,10 +21,10 @@ public class MainApplication {
                     LoginUI.display(sc);
                     break;
                 case 2:
-                    System.out.println("Cảm ơn bạn đã sử dụng chương trình.");
+                    System.out.println(Color.GREEN + "Cảm ơn bạn đã sử dụng chương trình." + Color.RESET);
                     System.exit(0);
                 default:
-                    System.out.println("Chức năng không hợp lê, vui lòng nhập lại");
+                    System.err.println("Chức năng không hợp lê, vui lòng nhập lại");
                     break;
             }
         } while (true);

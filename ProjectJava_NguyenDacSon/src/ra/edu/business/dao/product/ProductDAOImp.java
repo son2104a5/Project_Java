@@ -65,7 +65,6 @@ public class ProductDAOImp implements ProductDAO {
     public boolean update(Product product) {
         Connection conn = null;
         CallableStatement cs = null;
-        System.out.println(product);
         try {
             conn = ConnectionDB.getConnection();
             conn.setAutoCommit(true);

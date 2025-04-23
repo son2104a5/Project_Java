@@ -215,5 +215,96 @@ begin
 end;
 DELIMITER //
 
-call update_product_stock(2, 80);
-select * from product where id = 2;
+-- InvoiceService
+DELIMITER //
+create procedure display_all_invoice()
+begin
+    select * from invoice;
+end;
+
+create procedure add_invoice(
+    p_customer_id int,
+    p_total_amount decimal(12, 2)
+)
+begin
+    insert into invoice(customer_id, total_amount)
+    values (p_customer_id,  p_total_amount);
+end;
+
+create procedure search_invoice_by_customer_name(
+    p_customer_name varchar(100)
+)
+begin
+    declare cus_id int;
+    select id into cus_id from customer where name = p_customer_name;
+    select * from invoice where customer_id = cus_id;
+end;
+
+create procedure search_invoice_by_date(
+    p_date_in date,
+    p_date_out date
+)
+begin
+    select * from invoice where created_at between p_date_in and p_date_out;
+end;
+
+create procedure update_total_amount(
+    p_id int,
+    p_total_amount decimal(12, 2)
+)
+begin
+    update invoice
+        set total_amount = p_total_amount where id = p_id;
+end;
+DELIMITER //
+
+-- InvoiceDetailService
+DELIMITER //
+create procedure display_invoice_detail()
+begin
+    select * from invoice_detail;
+end;
+
+create procedure display_invoice_detail_by_invoice_id(
+    p_invoice_id int
+)
+begin
+    select * from invoice_detail where invoice_id = p_invoice_id;
+end;
+
+create procedure add_invoice_detail(
+    p_invoice_id int,
+    p_product_id int,
+    p_quantity int,
+    p_unit_price decimal(12, 2)
+)
+begin
+    insert into invoice_detail(invoice_id, product_id, quantity, unit_price)
+        values (p_invoice_id, p_product_id, p_quantity, p_unit_price);
+end;
+DELIMITER //
+
+-- StatisticService
+DELIMITER //
+create procedure total_date_revenue(
+    p_date date
+)
+begin
+    select * from invoice where date(created_at) = p_date;
+end;
+
+create procedure total_month_revenue(
+    p_month int,
+    p_year int
+)
+begin
+    select * from invoice where month(created_at) = p_month and year(created_at) = p_year;
+end;
+
+create procedure total_year_revenue(
+    p_year int
+)
+begin
+    select * from invoice where year(created_at) = p_year;
+end;
+DELIMITER //

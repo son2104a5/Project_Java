@@ -1,5 +1,6 @@
 package ra.edu.validate.objectValidator;
 
+import ra.edu.utils.Color;
 import ra.edu.validate.datatypeValidator.TypeValidator;
 import ra.edu.validate.datatypeValidator.ValidateFactory;
 
@@ -8,7 +9,7 @@ import java.util.Scanner;
 public class InputValidator {
     public static <T> T validateInputValue(Scanner scanner, String message, Class<T> type) {
         TypeValidator<T> validator = ValidateFactory.getValidator(type);
-        System.out.print(message);
+        System.out.print(Color.YELLOW + message + Color.RESET);
         while (true) {
             String value = scanner.nextLine().trim();
             if (value.isEmpty()) {
