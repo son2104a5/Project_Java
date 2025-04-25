@@ -1,8 +1,10 @@
 package ra.edu.business.dao.invoice;
 
+import ra.edu.MainApplication;
 import ra.edu.business.config.ConnectionDB;
 import ra.edu.business.model.Invoice;
 import ra.edu.business.model.InvoiceDetail;
+import ra.edu.utils.Color;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -32,7 +34,7 @@ public class InvoiceDAOImp implements InvoiceDAO {
                 invoiceDetails.add(invoiceDetail);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -60,7 +62,7 @@ public class InvoiceDAOImp implements InvoiceDAO {
                 invoices.add(invoice);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -89,7 +91,7 @@ public class InvoiceDAOImp implements InvoiceDAO {
                 invoices.add(invoice);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         }
@@ -117,13 +119,43 @@ public class InvoiceDAOImp implements InvoiceDAO {
                 invoice.setTotalAmount(rs.getDouble("total_amount"));
                 invoices.add(invoice);
             }
-            System.out.println("Số hóa đơn tìm thấy: " + invoices.size());
         } catch (SQLException e) {
-            System.err.println("Lỗi SQL: " + e.getMessage());
+            System.err.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
             throw new RuntimeException("Lỗi khi lấy danh sách hóa đơn", e);
         } catch (Exception e) {
-            System.err.println("Lỗi khác: " + e.getMessage());
-            throw new RuntimeException("Lỗi không xác định", e);
+            System.err.println("Lỗi khác: " + e.getMessage() + Color.RESET);
+        } finally {
+            ConnectionDB.close(conn, cs);
+        }
+        return invoices;
+    }
+
+    @Override
+    public List<Invoice> findPerPage(int page) {
+        Connection conn = null;
+        CallableStatement cs = null;
+        List<Invoice> invoices = new ArrayList<>();
+        try {
+            conn = ConnectionDB.getConnection();
+            if (conn == null) {
+                System.err.println("Kết nối cơ sở dữ liệu thất bại");
+                return invoices;
+            }
+            cs = conn.prepareCall("{call display_all_invoice_per_page(?)}");
+            cs.setInt(1, page == 1 ? 0 : (page - 1) * MainApplication.PAGE_SIZE);
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+                Invoice invoice = new Invoice();
+                invoice.setId(rs.getInt("id"));
+                invoice.setCustomerId(rs.getInt("customer_id"));
+                invoice.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                invoice.setTotalAmount(rs.getDouble("total_amount"));
+                invoices.add(invoice);
+            }
+        } catch (SQLException e) {
+            System.err.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
+        } catch (Exception e) {
+            System.err.println("Lỗi khác: " + e.getMessage() + Color.RESET);
         } finally {
             ConnectionDB.close(conn, cs);
         }
@@ -143,7 +175,7 @@ public class InvoiceDAOImp implements InvoiceDAO {
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -165,7 +197,7 @@ public class InvoiceDAOImp implements InvoiceDAO {
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {

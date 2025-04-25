@@ -1,5 +1,6 @@
 package ra.edu.business.model;
 
+import ra.edu.utils.Color;
 import ra.edu.validate.objectValidator.InputValidator;
 import ra.edu.validate.objectValidator.ProductValidator;
 
@@ -77,10 +78,20 @@ public class Product {
         brand = InputValidator.validateInputValue(scanner, "Nhập nhãn hiệu: ", String.class);
         do {
             price = InputValidator.validateInputValue(scanner, "Nhập giá sản phẩm:", Double.class);
-        } while (ProductValidator.validateDataHasNotPositiveValue(price));
+            if (ProductValidator.validateDataHasNotPositiveValue(price)) {
+                System.out.println(Color.RED + "Giá sản phẩm phải là số dương" + Color.RESET);
+            } else {
+                break;
+            }
+        } while (true);
         do {
             stock = InputValidator.validateInputValue(scanner, "Nhập số lượng tồn kho:", Integer.class);
-        } while (ProductValidator.validateDataHasNotPositiveValue(stock));
+            if (ProductValidator.validateDataHasNotPositiveValue(stock)) {
+                System.out.println(Color.RED + "Giá sản phẩm phải là số dương" + Color.RESET);
+            } else {
+                break;
+            }
+        } while (true);
     }
 
     @Override

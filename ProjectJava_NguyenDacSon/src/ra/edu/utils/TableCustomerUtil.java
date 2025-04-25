@@ -18,7 +18,7 @@ public class TableCustomerUtil {
         int emailWidth = "Email".length();
         int addressWidth = "Địa chỉ".length();
 
-        for (Customer customer : customers) {
+        for (Customer customer: customers) {
             idWidth = Math.max(idWidth, String.valueOf(customer.getId()).length());
             nameWidth = Math.max(nameWidth, customer.getName().length());
             phoneWidth = Math.max(phoneWidth, customer.getPhone().length());
@@ -36,18 +36,19 @@ public class TableCustomerUtil {
         int totalWidth = idWidth + nameWidth + phoneWidth + emailWidth + addressWidth + 15;
 
         // Bước 2: In tiêu đề
-        System.out.println("+" + "-".repeat(((totalWidth - title.length()) / 2) - 2) + " " + title + " " + "-".repeat(((totalWidth - title.length()) - 2) / 2) + "+");
+        System.out.println(Color.BLUE + "+" + "-".repeat(((totalWidth - title.length()) / 2) - 2) + Color.CYAN +  " " + title + " " + Color.BLUE + "-".repeat(((totalWidth - title.length()) - 2) / 2) + "+" + Color.RESET);
 
         // Bước 3: In tên cột
-        System.out.printf("| %-" + idWidth + "s | %-" + nameWidth + "s | %-" + phoneWidth + "s | %"
-                + emailWidth + "s | %-" + addressWidth + "s |\n", "ID", "Tên khách hàng", "Số điện thoại", "Email", "Địa chỉ");
+        System.out.printf(Color.YELLOW + "| %-" + idWidth + "s | %-" + nameWidth + "s | %-" + phoneWidth + "s | %"
+                + emailWidth + "s | %-" + addressWidth + "s |\n" + Color.RESET,
+                "ID", "Tên khách hàng", "Số điện thoại", "Email", "Địa chỉ");
 
         // Bước 4: In đường kẻ
-        System.out.println("+" + "-".repeat(totalWidth - 1) + "+");
+        System.out.println(Color.BLUE + "+" + "-".repeat(totalWidth - 1) + "+" + Color.RESET);
     }
 
     public static void printCustomerTableFooter() {
         int totalWidth = Customer.idWidth + Customer.nameWidth + Customer.phoneWidth + Customer.emailWidth + Customer.addressWidth + 15;
-        System.out.println("+" + "-".repeat(totalWidth - 1) + "+");
+        System.out.println(Color.BLUE + "+" + "-".repeat(totalWidth - 1) + "+" + Color.RESET);
     }
 }

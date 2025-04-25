@@ -2,12 +2,15 @@ package ra.edu.business.model;
 
 import ra.edu.business.service.customer.CustomerService;
 import ra.edu.business.service.customer.CustomerServiceImp;
+import ra.edu.utils.Color;
 import ra.edu.validate.objectValidator.InputValidator;
 
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class Invoice {
+    private final CustomerService customerService = new CustomerServiceImp();
+
     private int id;
     private int customerId;
     private LocalDateTime createdAt;
@@ -55,7 +58,7 @@ public class Invoice {
     }
 
     public static int idWidth = "ID".length();
-    public static int customerIdWidth = "Mã khách hàng".length();
+    public static int customerNameWidth = "Tên khách hàng".length();
     public static int createdAtWidth = "Ngày tạo".length();
     public static int totalAmountWidth = "Tổng tiền".length();
 
@@ -65,7 +68,7 @@ public class Invoice {
             CustomerService customerService = new CustomerServiceImp();
             customerId = InputValidator.validateInputValue(scanner, "Nhập ID khách hàng: ", Integer.class);
             if (customerService.findCustomerByID(customerId) == null) {
-                System.err.println("Khách hàng có id" + customerId + " không tồn tại");
+                System.out.println(Color.RED + "Khách hàng có id" + customerId + " không tồn tại" + Color.RESET);
             } else {
                 break;
             }
@@ -76,7 +79,9 @@ public class Invoice {
 
     @Override
     public String toString() {
-        return String.format("| %-" + idWidth + "d | %-" + customerIdWidth + "d | %-" + createdAtWidth + "s | %" + totalAmountWidth + ".2f |",
-                id, customerId, createdAt, totalAmount);
+        CustomerService customerService = new CustomerServiceImp();
+        Customer customer = customerService.findCustomerByID(customerId);
+        return String.format("| %-" + idWidth + "d | %-" + customerNameWidth + "s | %-" + createdAtWidth + "s | %" + totalAmountWidth + ".2f |",
+                id, customer.getName(), createdAt, totalAmount);
     }
 }

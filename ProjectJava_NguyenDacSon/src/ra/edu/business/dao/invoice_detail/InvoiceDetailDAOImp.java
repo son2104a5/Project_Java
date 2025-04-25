@@ -2,6 +2,7 @@ package ra.edu.business.dao.invoice_detail;
 
 import ra.edu.business.config.ConnectionDB;
 import ra.edu.business.model.InvoiceDetail;
+import ra.edu.utils.Color;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -11,6 +12,11 @@ import java.util.List;
 public class InvoiceDetailDAOImp implements InvoiceDetailDAO {
     @Override
     public List<InvoiceDetail> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public List<InvoiceDetail> findPerPage(int page) {
         return List.of();
     }
 
@@ -29,7 +35,7 @@ public class InvoiceDetailDAOImp implements InvoiceDetailDAO {
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {

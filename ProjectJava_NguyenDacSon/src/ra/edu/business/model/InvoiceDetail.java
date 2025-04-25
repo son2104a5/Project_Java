@@ -2,12 +2,15 @@ package ra.edu.business.model;
 
 import ra.edu.business.service.product.ProductService;
 import ra.edu.business.service.product.ProductServiceImp;
+import ra.edu.utils.Color;
 import ra.edu.validate.objectValidator.InputValidator;
 import ra.edu.validate.objectValidator.ProductValidator;
 
 import java.util.Scanner;
 
 public class InvoiceDetail {
+    private final ProductService productService = new ProductServiceImp();
+
     private int id;
     private int invoiceId;
     private int productId;
@@ -64,7 +67,7 @@ public class InvoiceDetail {
         this.unitPrice = unitPrice;
     }
 
-    public void inputData(Scanner scanner, Invoice invoice) {
+    public boolean inputData(Scanner scanner, Invoice invoice) {
         ProductService productService = new ProductServiceImp();
         Product product = null;
         invoiceId = invoice.getId();
@@ -72,7 +75,11 @@ public class InvoiceDetail {
             productId = InputValidator.validateInputValue(scanner, "Nhập ID sản phẩm: ", Integer.class);
             product = productService.findProductById(productId);
             if (product == null) {
-                System.err.println("Koông tồn tại sản phẩm có ID = " + productId + ", vui lòng nhập lại");
+                System.out.println(Color.RED + "Không tồn tại sản phẩm có ID = " + productId + ", vui lòng nhập lại" + Color.RESET);
+                return false;
+            } else if (product.getStock() == 0) {
+                System.out.println(Color.RED + "Sản phẩm đã hết hàng" + Color.RESET);
+                return false;
             } else {
                 break;
             }
@@ -80,24 +87,31 @@ public class InvoiceDetail {
         do {
             quantity = InputValidator.validateInputValue(scanner, "Nhập số lượng: ", Integer.class);
             if (ProductValidator.validateDataHasNotPositiveValue(quantity)) {
-                System.err.println("Số lượng không hợp lệ, vui lòng nhập lại");
+                System.out.println(Color.RED + "Số lượng không hợp lệ, vui lòng nhập lại" + Color.RESET);
+            } else if (product.getStock() < quantity) {
+                System.out.println(Color.RED + "Số lượng tồn kho của sản phẩm không đủ" + Color.RESET);
+                return false;
             } else {
+                product.setStock(product.getStock() - quantity);
+                productService.save(product);
                 break;
             }
         } while (true);
         unitPrice = product.getPrice() * quantity;
         invoice.setTotalAmount(invoice.getTotalAmount() + unitPrice);
+        return true;
     }
 
     public static int idWidth = "ID".length();
     public static int invoiceIdWidth = "Mã hóa đơn".length();
-    public static int productIdWidth = "Mã sản phẩm".length();
+    public static int productNameWidth = "Tên sản phẩm".length();
     public static int quantityWidth = "Số lượng".length();
     public static int unitPriceWidth = "Thành tiền".length();
 
     @Override
     public String toString() {
-        return String.format("| %-" + idWidth + "d | %-" + invoiceIdWidth + "d | %-" + productIdWidth + "d | %" + quantityWidth + "d | %-" + unitPriceWidth + ".2f |",
-                id, invoiceId, productId, quantity, unitPrice);
+        Product product = productService.findProductById(productId);
+        return String.format("| %-" + idWidth + "d | %-" + invoiceIdWidth + "d | %-" + productNameWidth + "s | %" + quantityWidth + "d | %-" + unitPriceWidth + ".2f |",
+                id, invoiceId, product.getName(), quantity, unitPrice);
     }
 }

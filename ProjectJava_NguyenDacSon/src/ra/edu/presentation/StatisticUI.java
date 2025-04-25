@@ -1,7 +1,6 @@
 package ra.edu.presentation;
 
 import ra.edu.business.model.Invoice;
-import ra.edu.business.service.invoice.InvoiceService;
 import ra.edu.business.service.statistic.StatisticService;
 import ra.edu.business.service.statistic.StatisticServiceImp;
 import ra.edu.utils.Color;
@@ -24,12 +23,12 @@ public class StatisticUI {
     public static void display(Scanner scanner) {
         StatisticUI statisticUI = new StatisticUI();
         do {
-            System.out.println("============= THỐNG KÊ DOANH THU =============\n" +
-                    "1. Theo ngày\n" +
+            System.out.println(Color.BLUE + "=============" + Color.PURPLE + " THỐNG KÊ DOANH THU " + Color.BLUE + "=============\n" +
+                    Color.CYAN + "1. Theo ngày\n" +
                     "2. Theo tháng\n" +
                     "3. Theo năm\n" +
-                    "4. Quay lại menu chính\n" +
-                    "==============================================");
+                    "0. Quay lại menu chính\n" +
+                    Color.BLUE + "==============================================" + Color.RESET);
             int choice = InputValidator.validateInputValue(scanner, "Chọn chức năng: ", Integer.class);
             switch (choice) {
                 case 1:
@@ -41,51 +40,80 @@ public class StatisticUI {
                 case 3:
                     statisticUI.totalYearRevenue(scanner);
                     break;
-                case 4:
+                case 0:
                     System.out.println(Color.GREEN + "Thoát menu thống kê..." + Color.RESET);
                     return;
                 default:
-                    System.err.println("Lựa chọn của bạn không hợp lê, vui lòng nhập lại");
+                    System.out.println(Color.RED + "Lựa chọn của bạn không hợp lê, vui lòng nhập lại" + Color.RESET);
                     break;
             }
         } while (true);
     }
 
     public void totalDateRevenue(Scanner scanner) {
-        LocalDate date = InputValidator.validateInputValue(scanner, "Nhập ngày tháng năm ngày bạn muốn thống kê: ", LocalDate.class);
+        LocalDate date_in = InputValidator.validateInputValue(scanner, "Nhập ngày bắt đầu (định dạng dd/MM/yyyy): ", LocalDate.class);
+        LocalDate date_out;
+        do {
+            date_out = InputValidator.validateInputValue(scanner, "Nhập ngày kết thúc (định dạng dd/MM/yyyy): ", LocalDate.class);
+            if (date_in.isAfter(date_out)) {
+                System.out.println(Color.RED + "Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu, vui lòng nhập lại." + Color.RESET);
+            } else {
+                break;
+            }
+        } while (true);
 
-        List<Invoice> invoiceList = statisticService.totalDateRevenue(date);
+        List<Invoice> invoiceList = statisticService.totalDateRevenue(date_in, date_out);
         if (invoiceList.isEmpty()) {
-            System.err.println("Không có hóa đơn trong ngày bạn chọn");
+            System.out.println(Color.RED + "Không có hóa đơn trong thời gian bạn chọn" + Color.RESET);
             return;
         }
 
-        displayTable(scanner, invoiceList, "DANH SÁCH CÁC HÓA ĐƠN NGÀY " + date);
+        displayTable(scanner, invoiceList, "DANH SÁCH CÁC HÓA ĐƠN NGÀY " + date_in + " -> " + date_out);
     }
 
     public void totalMonthRevenue(Scanner scanner) {
-        int month = InputValidator.validateInputValue(scanner, "Nhập tháng: ", Integer.class);
-        int year = InputValidator.validateInputValue(scanner, "Nhập năm: ", Integer.class);
+        int month_in = InputValidator.validateInputValue(scanner, "Nhập tháng bắt đầu: ", Integer.class);
+        int year_in = InputValidator.validateInputValue(scanner, "Nhập năm bắt đầu: ", Integer.class);
 
-        List<Invoice> invoiceList = statisticService.totalMonthRevenue(month, year);
+        int month_out = InputValidator.validateInputValue(scanner, "Nhập tháng kết thúc: ", Integer.class);
+        int year_out;
+        do {
+            year_out = InputValidator.validateInputValue(scanner, "Nhập năm kết thúc: ", Integer.class);
+            if (year_out < year_in) {
+                System.out.println(Color.RED + "Năm kết thúc phải lớn hơn năm bắt đầu, vui lòng nhập lại" + Color.RESET);
+            } else {
+                break;
+            }
+        } while (true);
+
+        List<Invoice> invoiceList = statisticService.totalMonthRevenue(month_in, year_in, month_out, year_out);
         if (invoiceList.isEmpty()) {
-            System.err.println("Không có hóa đơn trong ngày bạn chọn");
+            System.out.println(Color.RED + "Không có hóa đơn trong thời gian bạn chọn" + Color.RESET);
             return;
         }
 
-        displayTable(scanner, invoiceList, "DANH SÁCH CÁC HÓA ĐƠN THÁNG " + month + " NĂM " + year);
+        displayTable(scanner, invoiceList, "DANH SÁCH CÁC HÓA ĐƠN THÁNG " + month_in + "/" + year_in + " -> " + month_out + "/" + year_out);
     }
 
     public void totalYearRevenue(Scanner scanner) {
-        int year = InputValidator.validateInputValue(scanner, "Nhập năm bạn muốn thống kê: ", Integer.class);
+        int year_in = InputValidator.validateInputValue(scanner, "Nhập năm bắt đầu: ", Integer.class);
+        int year_out;
+        do {
+            year_out = InputValidator.validateInputValue(scanner, "Nhập năm kết thúc: ", Integer.class);
+            if (year_out < year_in) {
+                System.out.println(Color.RED + "Năm kết thúc phải lớn hơn năm bắt đầu, vui lòng nhập lại" + Color.RESET);
+            } else {
+                break;
+            }
+        } while (true);
 
-        List<Invoice> invoiceList = statisticService.totalYearRevenue(year);
+        List<Invoice> invoiceList = statisticService.totalYearRevenue(year_in, year_out);
         if (invoiceList.isEmpty()) {
-            System.err.println("Không có hóa đơn trong ngày bạn chọn");
+            System.out.println(Color.RED + "Không có hóa đơn trong thời gian bạn chọn" + Color.RESET);
             return;
         }
 
-        displayTable(scanner, invoiceList, "DANH SÁCH CÁC HÓA ĐƠN NĂM " + year);
+        displayTable(scanner, invoiceList, "DANH SÁCH CÁC HÓA ĐƠN NĂM " + year_in + " -> " + year_out);
     }
 
     public void displayTable(Scanner scanner, List<Invoice> invoiceList , String title) {
@@ -99,21 +127,21 @@ public class StatisticUI {
             for (Invoice invoice: invoiceList) {
                 totalRevenue += invoice.getTotalAmount();
             }
-            System.out.println("Tổng doanh thu: " + totalRevenue);
+            System.out.println(Color.GREEN + "Tổng doanh thu: " + totalRevenue + Color.RESET);
 
-            System.out.println("Bạn muốn làm gì tiếp theo: \n" +
-                    "1. Xem hóa đơn chi tiết\n" +
-                    "2. Thoát");
+            System.out.println(Color.PURPLE + "Bạn muốn làm gì tiếp theo: \n" +
+                    Color.CYAN + "1. Xem hóa đơn chi tiết\n" +
+                    "0. Thoát" + Color.RESET);
             choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
             switch (choice) {
                 case 1:
                     invoiceUI.displayInvoiceDetail(scanner, invoiceList);
                     break;
-                case 2:
+                case 0:
                     System.out.println(Color.GREEN + "Thoát chức năng..." + Color.RESET);
                     return;
                 default:
-                    System.err.println("Lựa chọn của bạn không hợp lê, vui lòng nhập lại");
+                    System.out.println(Color.RED + "Lựa chọn của bạn không hợp lê, vui lòng nhập lại" + Color.RESET);
                     break;
             }
         } while (true);

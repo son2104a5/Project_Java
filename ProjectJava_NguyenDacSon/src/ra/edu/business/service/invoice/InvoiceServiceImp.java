@@ -21,6 +21,11 @@ public class InvoiceServiceImp implements InvoiceService {
     }
 
     @Override
+    public List<Invoice> findPerPage(int page) {
+        return invoiceDAO.findPerPage(page);
+    }
+
+    @Override
     public boolean save(Invoice invoice) {
         return invoiceDAO.save(invoice);
     }

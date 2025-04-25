@@ -1,7 +1,9 @@
 package ra.edu.business.dao.product;
 
+import ra.edu.MainApplication;
 import ra.edu.business.config.ConnectionDB;
 import ra.edu.business.model.Product;
+import ra.edu.utils.Color;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -31,7 +33,37 @@ public class ProductDAOImp implements ProductDAO {
                 products.add(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        } finally {
+            ConnectionDB.close(conn, cs);
+        }
+        return products;
+    }
+
+    @Override
+    public List<Product> findPerPage(int page) {
+        Connection conn = null;
+        CallableStatement cs = null;
+        List<Product> products = null;
+        try {
+            conn = ConnectionDB.getConnection();
+            cs = conn.prepareCall("{call display_all_product_per_page(?)}");
+            cs.setInt(1, page == 1 ? 0 : (page - 1) * MainApplication.PAGE_SIZE);
+            ResultSet rs = cs.executeQuery();
+            products = new ArrayList<Product>();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                product.setBrand(rs.getString("brand"));
+                product.setPrice(rs.getDouble("price"));
+                product.setStock(rs.getInt("stock"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -54,7 +86,7 @@ public class ProductDAOImp implements ProductDAO {
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         }
@@ -95,7 +127,7 @@ public class ProductDAOImp implements ProductDAO {
             }
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -115,9 +147,9 @@ public class ProductDAOImp implements ProductDAO {
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi: Sản phẩm đã được mua, không thể xóa" + Color.RESET);
         } catch (Exception e) {
-            e.fillInStackTrace();
+            System.out.println(Color.RED + "Lỗi không xác định: " + e.getMessage() + Color.RESET + Color.RESET);
         } finally {
             ConnectionDB.close(conn, cs);
         }
@@ -144,7 +176,7 @@ public class ProductDAOImp implements ProductDAO {
                 return product;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -173,7 +205,7 @@ public class ProductDAOImp implements ProductDAO {
                 products.add(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -203,7 +235,7 @@ public class ProductDAOImp implements ProductDAO {
                 products.add(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -233,7 +265,7 @@ public class ProductDAOImp implements ProductDAO {
                 products.add(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {

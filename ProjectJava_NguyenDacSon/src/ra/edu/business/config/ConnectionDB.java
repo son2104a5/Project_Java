@@ -1,5 +1,7 @@
 package ra.edu.business.config;
 
+import ra.edu.utils.Color;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,9 +18,9 @@ public class ConnectionDB {
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
 
         } catch (SQLException e) {
-            System.out.println("Lỗi: " + e.getMessage());
+            System.out.println(Color.RED + "Lỗi: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
-            System.out.println("Lỗi không xác định: " + e.getMessage());
+            System.out.println(Color.RED + "Lỗi không xác định: " + e.getMessage() + Color.RESET);
         }
         return conn;
     }

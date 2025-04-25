@@ -1,5 +1,6 @@
 package ra.edu.presentation;
 
+import ra.edu.MainApplication;
 import ra.edu.business.model.Invoice;
 import ra.edu.business.model.InvoiceDetail;
 import ra.edu.business.service.invoice.InvoiceService;
@@ -28,12 +29,12 @@ public class InvoiceUI {
     public static void display(Scanner scanner) {
         InvoiceUI invoiceUI = new InvoiceUI();
         do {
-            System.out.println("========== QUẢN LÍ ĐƠN HÀNG =========\n" +
-                    "1. Hiển thị danh sách hóa đơn\n" +
+            System.out.println(Color.BLUE + "==========" + Color.PURPLE + " QUẢN LÍ ĐƠN HÀNG " + Color.BLUE + "=========\n" +
+                    Color.CYAN + "1. Hiển thị danh sách hóa đơn\n" +
                     "2. Thêm mới hóa đơn\n" +
                     "3. Tìm kiếm hóa đơn\n" +
-                    "4. Quay lại menu chính\n" +
-                    "=========================================");
+                    "0. Quay lại menu chính\n" +
+                    Color.BLUE + "=========================================" + Color.RESET);
             int choice = InputValidator.validateInputValue(scanner, "Chọn chức năng: ", Integer.class);
             switch (choice) {
                 case 1:
@@ -45,11 +46,11 @@ public class InvoiceUI {
                 case 3:
                     invoiceUI.menuFindInvoice(scanner);
                     break;
-                case 4:
+                case 0:
                     System.out.println(Color.GREEN + "Thoát menu hóa đơn..." + Color.RESET);
                     return;
                 default:
-                    System.err.println("Lựa chọn của bạn không hợp lệ, vui lòng nhập lại");
+                    System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng nhập lại" + Color.RESET);
                     break;
             }
         } while (true);
@@ -58,28 +59,56 @@ public class InvoiceUI {
     public void displayInvoices(Scanner scanner) {
         List<Invoice> invoices = invoiceService.findAll();
         if (invoices.isEmpty()) {
-            System.err.println("Không có hóa đơn, vui lòng thêm hóa đơn trước!");
+            System.out.println(Color.RED + "Không có hóa đơn, vui lòng thêm hóa đơn trước!" + Color.RESET);
             return;
         }
+        List<Invoice> invoiceInPage = invoiceService.findPerPage(MainApplication.FIRST_PAGE);
+        int currentPage = MainApplication.FIRST_PAGE;
+        int totalInvoices = invoices.size();
+        int totalPage = (int) Math.ceil((double) totalInvoices / MainApplication.PAGE_SIZE);
+
         do {
             TableInvoiceUtil.printInvoiceTableHeader(invoices, "DANH SÁCH CÁC ĐƠN HÀNG HIỆN CÓ");
             invoices.forEach(System.out::println);
             TableInvoiceUtil.printInvoiceTableFooter();
-
-            System.out.println("Bạn muốn làm gì:\n" +
-                    "1. Xem chi tiết hóa đơn\n" +
-                    "2. Thoát");
+            System.out.println("Trang " + currentPage + "/" + totalPage);
+            System.out.println(Color.YELLOW + "1. Prev \t 2. Chọn trang \t 3. Next \t 4. Xem chi tiết hóa đơn \t 0. Thoát" + Color.RESET);
             int choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
             switch (choice) {
-                case 1:
-                    displayInvoiceDetail(scanner, invoices);
-                    break;
-                case 2:
+                case 1 -> {
+                    if (currentPage > MainApplication.FIRST_PAGE) {
+                        invoiceInPage = invoiceService.findPerPage(currentPage - 1);
+                        currentPage--;
+                    } else {
+                        System.out.println(Color.RED + "Đây là trang đầu tiên, không thể chuyển." + Color.RESET);
+                    }
+                }
+                case 2 -> {
+                    do {
+                        int page = InputValidator.validateInputValue(scanner, "Nhập trang muốn xem: ", Integer.class);
+                        if (page >= 1 && page <= totalPage) {
+                            invoiceInPage = invoiceService.findPerPage(page);
+                            currentPage = page;
+                            break;
+                        } else {
+                            System.out.println(Color.RED + "Số trang không hợp lệ, vui lòng nhập lại." + Color.RESET);
+                        }
+                    } while (true);
+                }
+                case 3 -> {
+                    if (currentPage < totalPage) {
+                        invoiceInPage = invoiceService.findPerPage(currentPage + 1);
+                        currentPage++;
+                    } else {
+                        System.out.println(Color.RED + "Đây là trang cuối cùng, không thể chuyển" + Color.RESET);
+                    }
+                }
+                case 4 -> displayInvoiceDetail(scanner, invoices);
+                case 0 -> {
                     System.out.println(Color.GREEN + "Thoát chức năng..." + Color.RESET);
                     return;
-                default:
-                    System.err.println("Lựa chọn của bạn không hợp lệ, vui lòng nhập lại");
-                    break;
+                }
+                default -> System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng nhập lại" + Color.RESET);
             }
         } while (true);
     }
@@ -102,18 +131,18 @@ public class InvoiceUI {
                 invoiceDetails.forEach(System.out::println);
                 TableInvoiceDetailUtil.printInvoiceDetailTableFooter();
 
-                System.out.println("Bạn muốn làm gì tiếp:\n" +
-                        "1. Xem chi tiết hóa đơn khác\n" +
-                        "2. Thoát");
+                System.out.println(Color.PURPLE + "Bạn muốn làm gì tiếp:\n" +
+                        Color.CYAN + "1. Xem chi tiết hóa đơn khác\n" +
+                        "0. Thoát" + Color.RESET);
                 choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
                 switch (choice) {
                     case 1:
                         break;
-                    case 2:
+                    case 0:
                         System.out.println(Color.GREEN + "Thoát xem chi tiết..." + Color.RESET);
-                        break;
+                        return;
                     default:
-                        System.err.println("Lựa chọn không hợp lệ, vui lòng nhập lại");
+                        System.out.println(Color.RED + "Lựa chọn không hợp lệ, vui lòng nhập lại" + Color.RESET);
                         break;
                 }
             }
@@ -133,30 +162,32 @@ public class InvoiceUI {
                 do {
                     System.out.println("Bạn có muốn thêm sản phẩm cho hóa đơn này không:\n" +
                             "1. Có\n" +
-                            "2. Không");
+                            "0. Không");
                     choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
                     switch (choice) {
                         case 1:
                             InvoiceDetail invoiceDetail = new InvoiceDetail();
-                            invoiceDetail.inputData(scanner, invoice);
+                            boolean updated = invoiceDetail.inputData(scanner, invoice);
+                            if (!updated) {
+                                break;
+                            }
                             boolean flag = invoiceDetailService.save(invoiceDetail);
                             if (flag) {
                                 System.out.println("Thêm thành công sản phẩm có mã hóa đơn " + invoiceDetail.getProductId() + " vào hóa đơn " + invoiceDetail.getInvoiceId());
                                 invoiceService.update(invoice);
                             } else {
-                                System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
+                                System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);
                             }
                             break;
-                        case 2:
-                            System.out.println("========================================================");
+                        case 0:
                             break;
                         default:
-                            System.err.println("Lựa chọn không hợp lệ, vui lòng nhập lại");
+                            System.out.println(Color.RED + "Lựa chọn không hợp lệ, vui lòng nhập lại" + Color.RESET);
                             break;
                     }
-                } while (choice != 2);
+                } while (choice != 0);
             } else {
-                System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
+                System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);
                 return;
             }
         }
@@ -166,7 +197,7 @@ public class InvoiceUI {
         System.out.println("Bạn muốn tìm kiếm hóa đơn theo phương thức nào:\n" +
                 "1. Theo tên khách hàng\n" +
                 "2. Theo ngày/tháng/năm\n" +
-                "3. Quay lại menu hóa đơn");
+                "0. Quay lại menu hóa đơn");
         int choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
         switch (choice) {
             case 1:
@@ -175,11 +206,11 @@ public class InvoiceUI {
             case 2:
                 findInvoiceByDateAmount(scanner);
                 break;
-            case 3:
+            case 0:
                 System.out.println(Color.GREEN + "Thoát menu tìm kiếm..." + Color.RESET);
                 return;
             default:
-                System.err.println("Lựa chọn của bạn không hợp lệ, vui lòng nhập lại");
+                System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng nhập lại" + Color.RESET);
         }
     }
 
@@ -195,22 +226,22 @@ public class InvoiceUI {
 
                 System.out.println("Bạn muốn làm gì tiếp:\n" +
                         "1. Xem chi tiết hóa đơn\n" +
-                        "2. Thoát");
+                        "0. Thoát");
                 int choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
                 switch (choice) {
                     case 1:
                         displayInvoiceDetail(scanner, invoices);
                         break;
-                    case 2:
+                    case 0:
                         System.out.println(Color.GREEN + "Đang thoát..." + Color.RESET);
                         return;
                     default:
-                        System.err.println("Lựa chọn của bạn không hợp lệ, vui lòng chọn lại");
+                        System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng chọn lại" + Color.RESET);
                         break;
                 }
             } while (true);
         } else {
-            System.err.println("Không có khách hàng có tên " + name);
+            System.out.println(Color.RED + "Không có khách hàng có tên " + name + Color.RESET);
         }
     }
 
@@ -226,21 +257,21 @@ public class InvoiceUI {
 
             System.out.println("Bạn muốn làm gì tiếp:\n" +
                     "1. Xem chi tiết hóa đơn\n" +
-                    "2. Thoát");
+                    "0. Thoát");
             int choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
             switch (choice) {
                 case 1:
                     displayInvoiceDetail(scanner, invoices);
                     break;
-                case 2:
+                case 0:
                     System.out.println(Color.GREEN + "Đang thoát..." + Color.RESET);
                     return;
                 default:
-                    System.err.println("Lựa chọn của bạn không hợp lệ, vui lòng chọn lại");
+                    System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng chọn lại" + Color.RESET);
                     break;
             }
         } else {
-            System.err.println("Không có hóa đơn nằm trong khoảng từ ngày " + higherDate + " đến " + lowerDate);
+            System.out.println(Color.RED + "Không có hóa đơn nằm trong khoảng từ ngày " + higherDate + " đến " + lowerDate + Color.RESET);
         }
     }
 }

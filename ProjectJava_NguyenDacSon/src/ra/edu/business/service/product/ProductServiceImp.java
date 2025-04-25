@@ -21,6 +21,11 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
+    public List<Product> findPerPage(int page) {
+        return productDAO.findPerPage(page);
+    }
+
+    @Override
     public boolean save(Product product) {
         return productDAO.save(product);
     }

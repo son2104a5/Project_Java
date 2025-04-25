@@ -15,17 +15,17 @@ public class StatisticServiceImp implements StatisticService {
     }
 
     @Override
-    public List<Invoice> totalDateRevenue(LocalDate date) {
-        return statisticDAO.totalDateRevenue(date);
+    public List<Invoice> totalDateRevenue(LocalDate date_in, LocalDate date_out) {
+        return statisticDAO.totalDateRevenue(date_in, date_out);
     }
 
     @Override
-    public List<Invoice> totalMonthRevenue(int month, int year) {
-        return statisticDAO.totalMonthRevenue(month, year);
+    public List<Invoice> totalMonthRevenue(int month_in, int year_in, int month_out, int year_out) {
+        return statisticDAO.totalMonthRevenue(month_in, year_in, month_out, year_out);
     }
 
     @Override
-    public List<Invoice> totalYearRevenue(int year) {
-        return statisticDAO.totalYearRevenue(year);
+    public List<Invoice> totalYearRevenue(int year_in, int year_out) {
+        return statisticDAO.totalYearRevenue(year_in, year_out);
     }
 }

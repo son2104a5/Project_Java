@@ -18,7 +18,7 @@ public class TableProductUtil {
         int priceWidth = "Giá".length();
         int stockWidth = "Tồn kho".length();
 
-        for (Product product : products) {
+        for (Product product: products) {
             idWidth = Math.max(idWidth, String.valueOf(product.getId()).length());
             nameWidth = Math.max(nameWidth, product.getName().length());
             brandWidth = Math.max(brandWidth, product.getBrand().length());
@@ -34,20 +34,21 @@ public class TableProductUtil {
         Product.stockWidth = stockWidth;
 
         int totalWidth = idWidth + nameWidth + brandWidth + priceWidth + stockWidth + 15;
-
+        totalWidth = Math.max(totalWidth, title.length() + 2);
         // Bước 2: In tiêu đề
-        System.out.println("+" + "-".repeat(((totalWidth - title.length()) / 2) - 2) + " " + title + " " + "-".repeat(((totalWidth - title.length()) - 2) / 2) + "+");
+        System.out.println(Color.BLUE + "+" + "-".repeat(((totalWidth - title.length()) / 2) - 2) + Color.CYAN + " " + title + " " + Color.BLUE + "-".repeat(((totalWidth - title.length()) - 2) / 2) + "+" + Color.RESET);
 
         // Bước 3: In tên cột
-        System.out.printf("| %-" + idWidth + "s | %-" + nameWidth + "s | %-" + brandWidth + "s | %"
-                + priceWidth + "s | %-" + stockWidth + "s |\n", "ID", "Tên sản phẩm", "Nhãn hàng", "Giá", "Tồn kho");
+        System.out.printf(Color.YELLOW + "| %-" + idWidth + "s | %-" + nameWidth + "s | %-" + brandWidth + "s | %-"
+                + priceWidth + "s | %-" + stockWidth + "s |\n" + Color.RESET, "ID", "Tên sản phẩm", "Nhãn hàng", "Giá", "Tồn kho");
+
 
         // Bước 4: In đường kẻ
-        System.out.println("+" + "-".repeat(totalWidth - 1) + "+");
+        System.out.println(Color.BLUE + "+" + "-".repeat(totalWidth - 1) + "+" + Color.RESET);
     }
 
     public static void printProductTableFooter() {
         int totalWidth = Product.idWidth + Product.nameWidth + Product.brandWidth + Product.priceWidth + Product.stockWidth + 15;
-        System.out.println("+" + "-".repeat(totalWidth - 1) + "+");
+        System.out.println(Color.BLUE + "+" + "-".repeat(totalWidth - 1) + "+" + Color.RESET);
     }
 }

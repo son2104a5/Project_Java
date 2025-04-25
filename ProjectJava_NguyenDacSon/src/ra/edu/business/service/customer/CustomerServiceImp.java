@@ -19,6 +19,11 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
+    public List<Customer> findPerPage(int page) {
+        return customerDAO.findPerPage(page);
+    }
+
+    @Override
     public boolean save(Customer customer) {
         return customerDAO.save(customer);
     }

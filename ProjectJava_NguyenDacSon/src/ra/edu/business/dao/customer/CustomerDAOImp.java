@@ -1,9 +1,9 @@
 package ra.edu.business.dao.customer;
 
+import ra.edu.MainApplication;
 import ra.edu.business.config.ConnectionDB;
 import ra.edu.business.model.Customer;
-import ra.edu.business.model.Product;
-import ra.edu.validate.objectValidator.CustomerValidator;
+import ra.edu.utils.Color;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDAOImp implements CustomerDAO{
+public class CustomerDAOImp implements CustomerDAO {
     @Override
     public Customer findCustomerById(int id) {
         Connection conn = null;
@@ -33,7 +33,7 @@ public class CustomerDAOImp implements CustomerDAO{
                 return customer;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -62,7 +62,37 @@ public class CustomerDAOImp implements CustomerDAO{
                 customers.add(customer);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        } finally {
+            ConnectionDB.close(conn, cs);
+        }
+        return customers;
+    }
+
+    @Override
+    public List<Customer> findPerPage(int page) {
+        Connection conn = null;
+        CallableStatement cs = null;
+        List<Customer> customers = null;
+        try {
+            conn = ConnectionDB.getConnection();
+            cs = conn.prepareCall("{call display_all_customer_per_page(?)}");
+            cs.setInt(1, page == 1 ? 0 : (page - 1) * MainApplication.PAGE_SIZE);
+            ResultSet rs = cs.executeQuery();
+            customers = new ArrayList<Customer>();
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setId(rs.getInt("id"));
+                customer.setName(rs.getString("name"));
+                customer.setPhone(rs.getString("phone"));
+                customer.setEmail(rs.getString("email"));
+                customer.setAddress(rs.getString("address"));
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -85,7 +115,7 @@ public class CustomerDAOImp implements CustomerDAO{
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         }
@@ -126,7 +156,7 @@ public class CustomerDAOImp implements CustomerDAO{
             }
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Lỗi: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -146,7 +176,7 @@ public class CustomerDAOImp implements CustomerDAO{
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Không thể xóa do khách hàng này đã từng mua sản phẩm");
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {

@@ -19,6 +19,11 @@ public class InvoiceDetailServiceImp implements InvoiceDetailService{
     }
 
     @Override
+    public List<InvoiceDetail> findPerPage(int page) {
+        return List.of();
+    }
+
+    @Override
     public boolean save(InvoiceDetail invoiceDetail) {
         return invoiceDetailDAO.save(invoiceDetail);
     }

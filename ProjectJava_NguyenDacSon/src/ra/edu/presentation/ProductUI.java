@@ -1,5 +1,6 @@
 package ra.edu.presentation;
 
+import ra.edu.MainApplication;
 import ra.edu.business.model.Product;
 import ra.edu.business.service.product.ProductService;
 import ra.edu.business.service.product.ProductServiceImp;
@@ -22,46 +23,42 @@ public class ProductUI {
         ProductUI productUI = new ProductUI();
         do {
 
-            System.out.println("========= MENU QUẢN LÍ SẢN PHẨM =========\n" +
-                    "1. Hiển thị danh sách sản phẩm\n" +
+            System.out.println(Color.BLUE + "=========" + Color.PURPLE + " MENU QUẢN LÍ SẢN PHẨM " + Color.BLUE + "=========\n" +
+                    Color.CYAN + "1. Hiển thị danh sách sản phẩm\n" +
                     "2. Thêm sản phẩm mới\n" +
                     "3. Cập nhật thông tin sản phẩm\n" +
                     "4. Xóa sản phẩm theo ID\n" +
                     "5. Tìm kiếm theo Brand\n" +
                     "6. Tìm kiếm theo khoảng giá\n" +
                     "7. Tìm kiếm theo tồn kho\n" +
-                    "8. Quay lại menu chính\n" +
-                    "=========================================");
+                    "0. Quay lại menu chính\n" +
+                    Color.BLUE + "=========================================" + Color.RESET);
             int choice = InputValidator.validateInputValue(scanner, "Chọn chức năng: ", Integer.class);
             switch (choice) {
-                case 1 -> productUI.displayProducts();
+                case 1 -> productUI.displayProducts(scanner);
                 case 2 -> productUI.createProducts(scanner);
                 case 3 -> productUI.updateProduct(scanner);
                 case 4 -> productUI.deleteProduct(scanner);
                 case 5 -> productUI.findProductsByBrand(scanner);
                 case 6 -> productUI.findProductsByPriceAmount(scanner);
                 case 7 -> productUI.findProductsByStockRange(scanner);
-                case 8 -> {
+                case 0 -> {
                     System.out.println(Color.GREEN + "Thoát menu quản lí sản phẩm..." + Color.RESET);
                     return;
                 }
-                default -> {
-                    System.err.println("Lựa chọn của bạn không hợp lê, vui lòng nhập lại");
-                }
+                default ->
+                        System.out.println(Color.RED + "Lựa chọn của bạn không hợp lê, vui lòng nhập lại" + Color.RESET);
             }
         } while (true);
     }
 
-    public void displayProducts() {
+    public void displayProducts(Scanner scanner) {
         List<Product> products = productService.findAll();
         if (products.isEmpty()) {
-            System.err.println("Không tồn tại sản phẩm nào, vui lòng thêm sản phẩm");
+            System.out.println(Color.RED + "Không tồn tại sản phẩm nào, vui lòng thêm sản phẩm" + Color.RESET);
             return;
         }
-
-        TableProductUtil.printProductTableHeader(products, "DANH SÁCH TẤT CẢ SẢN PHẨM");
-        products.forEach(System.out::println);
-        TableProductUtil.printProductTableFooter();
+        displayProductInPage(scanner, products, "DANH SÁCH TẤT CẢ SẢN PHẨM");
     }
 
 
@@ -74,9 +71,9 @@ public class ProductUI {
             product.inputData(scanner, products);
             boolean success = productService.save(product);
             if (success) {
-                displayProducts();
+                displayProducts(scanner);
             } else {
-                System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
+                System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);
             }
         }
     }
@@ -89,12 +86,12 @@ public class ProductUI {
         if (product != null) {
             do {
                 List<Product> products = productService.findAll();
-                System.out.println("Bạn muốn thay đổi thông tin nào:\n" +
-                        "1. Tên sản phẩm\n" +
+                System.out.println(Color.PURPLE + "Bạn muốn thay đổi thông tin nào:\n" +
+                        Color.CYAN + "1. Tên sản phẩm\n" +
                         "2. Nhãn hiệu\n" +
                         "3. Giá sản phẩm\n" +
                         "4. Số lượng tồn kho\n" +
-                        "0. Thoát cập nhật");
+                        "0. Thoát cập nhật" + Color.RESET);
                 choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
                 switch (choice) {
                     case 1 -> {
@@ -119,8 +116,8 @@ public class ProductUI {
                             if (!flag) {
                                 product.setPrice(value);
                             } else
-                                System.err.println("Giá trị nhập vào phải lớn hơn 0");
-                        } while (!flag);
+                                System.out.println(Color.RED + "Giá trị nhập vào phải lớn hơn 0" + Color.RESET);
+                        } while (flag);
                     }
                     case 4 -> {
                         boolean flag;
@@ -130,70 +127,79 @@ public class ProductUI {
                             if (!flag) {
                                 product.setStock(value);
                             } else
-                                System.err.println("Giá trị nhập vào phải lớn hơn 0");
+                                System.out.println(Color.RED + "Giá trị nhập vào phải lớn hơn 0" + Color.RESET);
                         } while (flag);
                     }
                     case 0 -> System.out.println("Thoát chức năng cập nhật....");
-                    default -> System.out.println("Chức năng không hợp lệ, vui lòng nhập lại");
+                    default ->
+                            System.out.println(Color.RED + "Chức năng không hợp lệ, vui lòng nhập lại" + Color.RESET);
                 }
-                if (choice != 0){
+                if (choice == 0) {
                     boolean success = productService.update(product);
                     if (success) {
-                        displayProducts();
+                        displayProducts(scanner);
                     } else {
-                        System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
+                        System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);
                     }
                 }
             } while (choice != 0);
         } else {
-            System.err.println("Không tìm thấy sản phẩm có ID " + id + ".");
+            System.out.println(Color.RED + "Không tìm thấy sản phẩm có ID " + id + "." + Color.RESET);
         }
     }
 
     public void deleteProduct(Scanner scanner) {
-        System.out.print("Nhập ID sản phẩm muốn xóa: ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = InputValidator.validateInputValue(scanner, "Nhập ID sản phẩm muốn xóa: ", Integer.class);
 
         if (productService.findProductById(id) != null) {
-            Product product = new Product();
-            product.setId(id);
-            boolean success = productService.delete(product);
-            if (success) {
-                displayProducts();
-            } else {
-                System.err.println("Có lỗi xảy ra trong quá trình thực hiện");
-            }
+            do {
+                int choice = InputValidator.validateInputValue(scanner, "Bạn thực sự muốn xóa sản phẩm này? (1: Yes, 2: No): ", Integer.class);
+                switch (choice) {
+                    case 1:
+                        Product product = new Product();
+                        product.setId(id);
+                        boolean success = productService.delete(product);
+                        if (success) {
+                            displayProducts(scanner);
+                        } else {
+                            System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);
+                        }
+                        return;
+                    case 2:
+                        System.out.println("Đã hủy xóa sản phẩm có id " + id + ".");
+                        return;
+                    default:
+                        System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng nhập lại" + Color.RESET);
+                        break;
+                }
+            } while (true);
         } else {
-            System.err.println("Không tìm thấy sản phẩm có ID: " + id + ".");
+            System.out.println(Color.RED + "Không tìm thấy sản phẩm có ID: " + id + "." + Color.RESET);
         }
     }
 
     public void findProductsByBrand(Scanner scanner) {
-        System.out.print("Nhập nhãn hiệu của sản phẩm muốn tìm: ");
-        String brand = scanner.nextLine();
+        String brand = InputValidator.validateInputValue(scanner, "Nhập nhãn hiệu sản phẩm muốn tìm: ", String.class);
         List<Product> products = productService.findProductByBrand(brand);
         if (products != null) {
-            TableProductUtil.printProductTableHeader(products, "DANH SÁCH SẢN PHẨM CÓ BRAND = " + brand);
-            products.forEach(System.out::println);
-            TableProductUtil.printProductTableFooter();
+            displayProductInPage(scanner, products, "DANH SÁCH SẢN PHẨM CÓ BRAND = " + brand);
         } else {
-            System.err.println("Không tìm thấy sản phẩm có brand: " + brand + ".");
+            System.out.println(Color.RED + "Không tìm thấy sản phẩm có brand: " + brand + "." + Color.RESET);
         }
     }
 
     public void findProductsByPriceAmount(Scanner scanner) {
-        System.out.print("Nhập giá đầu: ");
-        Double min_price = Double.parseDouble(scanner.nextLine());
-        System.out.print("Nhập giá cuối: ");
-        Double max_price = Double.parseDouble(scanner.nextLine());
-
+        Double min_price = InputValidator.validateInputValue(scanner, "Nhập giá bắt đầu: ", Double.class);
+        Double max_price = InputValidator.validateInputValue(scanner, "Nhập giá kết thúc: ", Double.class);
+        if (max_price < min_price) {
+            System.out.println(Color.RED + "Giá kết thúc phải lớn hơn giá bắt đầu");
+            return;
+        }
         List<Product> products = productService.findProductByPriceAmount(min_price, max_price);
         if (products != null) {
-            TableProductUtil.printProductTableHeader(products, "DANH SÁCH SẢN PHẨM CÓ GIÁ TỪ " + min_price + "-" + max_price);
-            products.forEach(System.out::println);
-            TableProductUtil.printProductTableFooter();
+            displayProductInPage(scanner, products, "DANH SÁCH SẢN PHẨM CÓ GIÁ TỪ " + min_price + "-" + max_price);
         } else {
-            System.err.println("Không tìm thấy sản phẩm có giá từ " + min_price + " đến " + max_price + ".");
+            System.out.println(Color.RED + "Không tìm thấy sản phẩm có giá từ " + min_price + " đến " + max_price + "." + Color.RESET);
         }
     }
 
@@ -205,9 +211,59 @@ public class ProductUI {
 
         List<Product> products = productService.findProductByStockRange(min_stock, max_stock);
         if (products != null) {
-            TableProductUtil.printProductTableHeader(products, "DANH SÁCH SẢN PHẨM CÓ TỒN KHO TƯ " + min_stock + "-" + max_stock);
-            products.forEach(System.out::println);
-            TableProductUtil.printProductTableFooter();
+            displayProductInPage(scanner, products, "DANH SÁCH SẢN PHẨM CÓ TỒN KHO TƯ " + min_stock + "-" + max_stock);
         }
+    }
+
+    public void displayProductInPage(Scanner scanner, List<Product> products, String title) {
+        List<Product> productInPage = productService.findPerPage(MainApplication.FIRST_PAGE);
+        int currentPage = MainApplication.FIRST_PAGE;
+        int totalProducts = products.size();
+        int totalPage = (int) Math.ceil((double) totalProducts / MainApplication.PAGE_SIZE);
+
+        do {
+            TableProductUtil.printProductTableHeader(products, title);
+            productInPage.forEach(System.out::println);
+            TableProductUtil.printProductTableFooter();
+            System.out.println("Trang " + currentPage + "/" + totalPage);
+            System.out.println(Color.YELLOW + "1. Prev \t 2. Chọn trang \t 3. Next \t 0. Thoát" + Color.RESET);
+            int choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
+            switch (choice) {
+                case 1 -> {
+                    if (currentPage > MainApplication.FIRST_PAGE) {
+                        productInPage = productService.findPerPage(currentPage - 1);
+                        currentPage--;
+                    } else {
+                        System.out.println(Color.RED + "Đây là trang đầu tiên, không thể chuyển." + Color.RESET);
+                    }
+                }
+                case 2 -> {
+                    do {
+                        int page = InputValidator.validateInputValue(scanner, "Nhập trang muốn xem: ", Integer.class);
+                        if (page >= 1 && page <= totalPage) {
+                            productInPage = productService.findPerPage(page);
+                            currentPage = page;
+                            break;
+                        } else {
+                            System.out.println(Color.RED + "Số trang không hợp lệ, vui lòng nhập lại." + Color.RESET);
+                        }
+                    } while (true);
+                }
+                case 3 -> {
+                    if (currentPage < totalPage) {
+                        productInPage = productService.findPerPage(currentPage + 1);
+                        currentPage++;
+                    } else {
+                        System.out.println(Color.RED + "Đây là trang cuối cùng, không thể chuyển" + Color.RESET);
+                    }
+                }
+                case 0 -> {
+                    System.out.println(Color.GREEN + "Thoát chức năng..." + Color.RESET);
+                    return;
+                }
+                default ->
+                        System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng nhập lại" + Color.RESET);
+            }
+        } while (true);
     }
 }

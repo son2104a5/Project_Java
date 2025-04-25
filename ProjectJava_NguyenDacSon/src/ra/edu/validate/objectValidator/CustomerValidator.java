@@ -14,13 +14,13 @@ public class CustomerValidator {
         while (true) {
             String value = scanner.nextLine().trim();
             if (value.isEmpty()) {
-                System.err.println("Bạn chưa nhập email, vui lòng nhập dữ liệu");
+                System.out.println(Color.RED + "Bạn chưa nhập email, vui lòng nhập dữ liệu" + Color.RESET);
                 continue;
             }
             if (EmailValidator.isValidEmail(value)) {
                 return value;
             }
-            System.err.println("Không đúng định dạng email, vui lòng nhập lại");
+            System.out.println("Không đúng định dạng email, vui lòng nhập lại");
         }
     }
 
@@ -29,13 +29,13 @@ public class CustomerValidator {
         while (true) {
             String value = scanner.nextLine().trim();
             if (value.isEmpty()) {
-                System.err.println("Số điện thoại không được để trống!");
+                System.out.println(Color.RED + "Số điện thoại không được để trống!" + Color.RESET);
                 continue;
             }
             if (PhoneValidator.isValidPhoneNumberVN(value)) {
                 return value;
             }
-            System.err.println("Không đúng số điện thoại di đông VN, vui lòng nhập lại");
+            System.out.println(Color.RED + "Không đúng số điện thoại di đông VN, vui lòng nhập lại" + Color.RESET);
         }
     }
 
@@ -44,7 +44,7 @@ public class CustomerValidator {
         for (Customer customer : customerList) {
             String normalizedProductName = customer.getEmail().trim().replaceAll("\\s+", " ");
             if (normalizedProductName.equalsIgnoreCase(trimmedValue)) {
-                System.err.println("Email đã tồn tại, vui lòng nhập lại.");
+                System.out.println(Color.RED + "Email đã tồn tại, vui lòng nhập lại." + Color.RESET);
                 return true;
             }
         }

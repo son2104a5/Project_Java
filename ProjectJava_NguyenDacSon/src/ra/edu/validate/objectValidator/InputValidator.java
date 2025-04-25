@@ -13,17 +13,17 @@ public class InputValidator {
         while (true) {
             String value = scanner.nextLine().trim();
             if (value.isEmpty()) {
-                System.err.println("Chưa nhập dữ liệu, vui lòng nhập dữ liệu");
+                System.out.println(Color.RED + "Chưa nhập dữ liệu, vui lòng nhập dữ liệu" + Color.RESET);
                 continue;
             }
             if (validator.isValid(value)) {
                 try {
                     return validator.parse(value);
                 } catch (Exception e) {
-                    System.err.println("Lỗi khi chuyển đổi dữ liệu: " + e.getMessage());
+                    System.out.println(Color.RED + "Lỗi khi chuyển đổi dữ liệu: " + e.getMessage() + Color.RESET);
                 }
             } else {
-                System.err.println("Kiểu dữ liệu không phù hợp, vui lòng nhập lại");
+                System.out.println(Color.RED + "Kiểu dữ liệu không phù hợp, vui lòng nhập lại" + Color.RESET);
             }
         }
     }
