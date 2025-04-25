@@ -8,6 +8,8 @@ import ra.edu.validate.objectValidator.InputValidator;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
+import static ra.edu.MainApplication.df;
+
 public class Invoice {
     private final CustomerService customerService = new CustomerServiceImp();
 
@@ -81,7 +83,7 @@ public class Invoice {
     public String toString() {
         CustomerService customerService = new CustomerServiceImp();
         Customer customer = customerService.findCustomerByID(customerId);
-        return String.format("| %-" + idWidth + "d | %-" + customerNameWidth + "s | %-" + createdAtWidth + "s | %" + totalAmountWidth + ".2f |",
-                id, customer.getName(), createdAt, totalAmount);
+        return String.format("| %-" + idWidth + "d | %-" + customerNameWidth + "s | %-" + createdAtWidth + "s | %" + totalAmountWidth + "s |",
+                id, customer.getName(), createdAt, df.format(totalAmount));
     }
 }

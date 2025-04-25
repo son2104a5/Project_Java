@@ -173,7 +173,7 @@ public class InvoiceUI {
                             }
                             boolean flag = invoiceDetailService.save(invoiceDetail);
                             if (flag) {
-                                System.out.println("Thêm thành công sản phẩm có mã hóa đơn " + invoiceDetail.getProductId() + " vào hóa đơn " + invoiceDetail.getInvoiceId());
+                                System.out.println(Color.GREEN + "Thêm thành công sản phẩm có mã hóa đơn " + invoiceDetail.getProductId() + " vào hóa đơn " + invoiceDetail.getInvoiceId() + Color.RESET);
                                 invoiceService.update(invoice);
                             } else {
                                 System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);

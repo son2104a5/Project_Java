@@ -71,12 +71,12 @@ public class Customer {
     }
 
     public void inputData(Scanner scanner, List<Customer> customerList) {
-        name = InputValidator.validateInputValue(scanner, "Nhập tên khách hàng:", String.class);
-        phone = CustomerValidator.validatePhone(scanner, "Nhập số điện thoại:");
+        name = InputValidator.validateInputValue(scanner, "Nhập tên khách hàng: ", String.class);
+        phone = CustomerValidator.validatePhone(scanner, "Nhập số điện thoại: ");
         do {
-            email = CustomerValidator.validateEmail(scanner, "Nhập email khách hàng:");
+            email = CustomerValidator.validateEmail(scanner, "Nhập email khách hàng: ");
         } while (CustomerValidator.validateHasExistEmail(email, customerList));
-        address = InputValidator.validateInputValue(scanner, "Nhập địa chỉ:", String.class);
+        address = InputValidator.validateInputValue(scanner, "Nhập địa chỉ: ", String.class);
     }
 
     @Override

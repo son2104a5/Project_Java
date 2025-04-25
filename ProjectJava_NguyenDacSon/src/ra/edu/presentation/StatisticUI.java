@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import static ra.edu.MainApplication.df;
+
 public class StatisticUI {
     private final StatisticService statisticService;
     private final InvoiceUI invoiceUI;
@@ -127,7 +129,7 @@ public class StatisticUI {
             for (Invoice invoice: invoiceList) {
                 totalRevenue += invoice.getTotalAmount();
             }
-            System.out.println(Color.GREEN + "Tổng doanh thu: " + totalRevenue + Color.RESET);
+            System.out.println(Color.GREEN + "Tổng doanh thu: " + df.format(totalRevenue) + Color.RESET);
 
             System.out.println(Color.PURPLE + "Bạn muốn làm gì tiếp theo: \n" +
                     Color.CYAN + "1. Xem hóa đơn chi tiết\n" +

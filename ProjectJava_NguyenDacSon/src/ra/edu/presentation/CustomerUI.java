@@ -115,7 +115,7 @@ public class CustomerUI {
 
             if (success) {
                 displayCustomers(scanner);
-            } else System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);
+            }
         }
     }
 
@@ -169,8 +169,6 @@ public class CustomerUI {
                     boolean success = customerService.update(updateCustomer);
                     if (success) {
                         displayCustomers(scanner);
-                    } else {
-                        System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);
                     }
                 }
 
@@ -193,8 +191,6 @@ public class CustomerUI {
                         boolean success = customerService.delete(customer);
                         if (success) {
                             displayCustomers(scanner);
-                        } else {
-                            System.out.println(Color.RED + "Có lỗi xảy ra trong quá trình thực hiện" + Color.RESET);
                         }
                         return;
                     case 2:

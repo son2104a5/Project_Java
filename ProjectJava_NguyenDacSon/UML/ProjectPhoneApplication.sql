@@ -132,10 +132,10 @@ begin
 end;
 
 create procedure find_product_by_brand(
-    brand_in varchar(100)
+    p_brand varchar(100)
 )
 begin
-    select * from product where brand = brand_in and status = true and stock != 0;
+    select * from product where binary brand = binary p_brand and status = true and stock != 0;
 end;
 
 create procedure find_product_by_price_amount(
@@ -231,8 +231,8 @@ create procedure delete_customer(
     id_in int
 )
 begin
-    update customer
-    set status = false where id = id_in and status = true;
+    delete from customer
+    where id = id_in and status = true;
 end;
 DELIMITER //
 

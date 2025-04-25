@@ -30,6 +30,7 @@ public class ProductDAOImp implements ProductDAO {
                 product.setBrand(rs.getString("brand"));
                 product.setPrice(rs.getDouble("price"));
                 product.setStock(rs.getInt("stock"));
+                product.setStatus(rs.getBoolean("status"));
                 products.add(product);
             }
         } catch (SQLException e) {
@@ -60,6 +61,7 @@ public class ProductDAOImp implements ProductDAO {
                 product.setBrand(rs.getString("brand"));
                 product.setPrice(rs.getDouble("price"));
                 product.setStock(rs.getInt("stock"));
+                product.setStatus(rs.getBoolean("status"));
                 products.add(product);
             }
         } catch (SQLException e) {
@@ -203,8 +205,10 @@ public class ProductDAOImp implements ProductDAO {
                 product.setBrand(rs.getString("brand"));
                 product.setPrice(rs.getDouble("price"));
                 product.setStock(rs.getInt("stock"));
+                product.setStatus(rs.getBoolean("status"));
                 products.add(product);
             }
+            return products;
         } catch (SQLException e) {
             System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
@@ -212,7 +216,7 @@ public class ProductDAOImp implements ProductDAO {
         } finally {
             ConnectionDB.close(conn, cs);
         }
-        return products;
+        return null;
     }
 
     @Override
@@ -233,8 +237,10 @@ public class ProductDAOImp implements ProductDAO {
                 product.setBrand(rs.getString("brand"));
                 product.setPrice(rs.getDouble("price"));
                 product.setStock(rs.getInt("stock"));
+                product.setStatus(rs.getBoolean("status"));
                 products.add(product);
             }
+            return products;
         } catch (SQLException e) {
             System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
@@ -242,7 +248,7 @@ public class ProductDAOImp implements ProductDAO {
         } finally {
             ConnectionDB.close(conn, cs);
         }
-        return products;
+        return null;
     }
 
     @Override
@@ -263,8 +269,10 @@ public class ProductDAOImp implements ProductDAO {
                 product.setBrand(rs.getString("brand"));
                 product.setPrice(rs.getDouble("price"));
                 product.setStock(rs.getInt("stock"));
+                product.setStatus(rs.getBoolean("status"));
                 products.add(product);
             }
+            return products;
         } catch (SQLException e) {
             System.out.println(Color.RED + "Lỗi SQL: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
@@ -272,6 +280,6 @@ public class ProductDAOImp implements ProductDAO {
         } finally {
             ConnectionDB.close(conn, cs);
         }
-        return products;
+        return null;
     }
 }

@@ -12,6 +12,8 @@ import ra.edu.validate.objectValidator.ProductValidator;
 import java.util.List;
 import java.util.Scanner;
 
+import static ra.edu.MainApplication.df;
+
 public class ProductUI {
     private final ProductService productService;
 
@@ -181,8 +183,10 @@ public class ProductUI {
     public void findProductsByBrand(Scanner scanner) {
         String brand = InputValidator.validateInputValue(scanner, "Nhập nhãn hiệu sản phẩm muốn tìm: ", String.class);
         List<Product> products = productService.findProductByBrand(brand);
-        if (products != null) {
-            displayProductInPage(scanner, products, "DANH SÁCH SẢN PHẨM CÓ BRAND = " + brand);
+        if (!products.isEmpty()) {
+            TableProductUtil.printProductTableHeader(products, "DANH SÁCH SẢN PHẨM CÓ BRAND = " + brand);
+            products.forEach(System.out::println);
+            TableProductUtil.printProductTableFooter();
         } else {
             System.out.println(Color.RED + "Không tìm thấy sản phẩm có brand: " + brand + "." + Color.RESET);
         }
@@ -196,28 +200,33 @@ public class ProductUI {
             return;
         }
         List<Product> products = productService.findProductByPriceAmount(min_price, max_price);
-        if (products != null) {
-            displayProductInPage(scanner, products, "DANH SÁCH SẢN PHẨM CÓ GIÁ TỪ " + min_price + "-" + max_price);
+        if (!products.isEmpty()) {
+            TableProductUtil.printProductTableHeader(products, "DANH SÁCH SẢN PHẨM CÓ GIÁ TỪ " + min_price + "-" + max_price);
+            products.forEach(System.out::println);
+            TableProductUtil.printProductTableFooter();
         } else {
-            System.out.println(Color.RED + "Không tìm thấy sản phẩm có giá từ " + min_price + " đến " + max_price + "." + Color.RESET);
+            System.out.println(Color.RED + "Không tìm thấy sản phẩm có giá từ " + df.format(min_price) + " đến " + df.format(max_price) + "." + Color.RESET);
         }
     }
 
     public void findProductsByStockRange(Scanner scanner) {
-        System.out.print("Nhập khoảng tồn kho đầu: ");
-        int min_stock = Integer.parseInt(scanner.nextLine());
-        System.out.print("Nhập khoảng tồn kho cuối: ");
-        int max_stock = Integer.parseInt(scanner.nextLine());
+        int min_stock = InputValidator.validateInputValue(scanner, "Nhập khoảng tồn kho đầu: ", Integer.class);
+        int max_stock = InputValidator.validateInputValue(scanner, "Nhập khoảng tồn kho cuối: ", Integer.class);
+        if (max_stock < min_stock) {
+            System.out.println(Color.RED + "Giá cuối phải lớn hơn giá đầu" + Color.RESET);
+        }
 
         List<Product> products = productService.findProductByStockRange(min_stock, max_stock);
-        if (products != null) {
-            displayProductInPage(scanner, products, "DANH SÁCH SẢN PHẨM CÓ TỒN KHO TƯ " + min_stock + "-" + max_stock);
+        if (!products.isEmpty()) {
+            TableProductUtil.printProductTableHeader(products, "DANH SÁCH SẢN PHẨM CÓ TỒN KHO TƯ " + min_stock + "-" + max_stock);
+            products.forEach(System.out::println);
+            TableProductUtil.printProductTableFooter();
         }
     }
 
     public void displayProductInPage(Scanner scanner, List<Product> products, String title) {
-        List<Product> productInPage = productService.findPerPage(MainApplication.FIRST_PAGE);
         int currentPage = MainApplication.FIRST_PAGE;
+        List<Product> productInPage = productService.findPerPage(currentPage);
         int totalProducts = products.size();
         int totalPage = (int) Math.ceil((double) totalProducts / MainApplication.PAGE_SIZE);
 

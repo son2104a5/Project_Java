@@ -7,6 +7,8 @@ import ra.edu.validate.objectValidator.ProductValidator;
 import java.util.List;
 import java.util.Scanner;
 
+import static ra.edu.MainApplication.df;
+
 public class Product {
     private int id;
     private String name;
@@ -82,11 +84,11 @@ public class Product {
 
     public void inputData(Scanner scanner, List<Product> productList) {
         do {
-            name = InputValidator.validateInputValue(scanner, "Nhập tên sản phẩm:", String.class);
+            name = InputValidator.validateInputValue(scanner, "Nhập tên sản phẩm: ", String.class);
         } while (ProductValidator.validateHasExistValue(name, productList));
         brand = InputValidator.validateInputValue(scanner, "Nhập nhãn hiệu: ", String.class);
         do {
-            price = InputValidator.validateInputValue(scanner, "Nhập giá sản phẩm:", Double.class);
+            price = InputValidator.validateInputValue(scanner, "Nhập giá sản phẩm: ", Double.class);
             if (ProductValidator.validateDataHasNotPositiveValue(price)) {
                 System.out.println(Color.RED + "Giá sản phẩm phải là số dương" + Color.RESET);
             } else {
@@ -94,7 +96,7 @@ public class Product {
             }
         } while (true);
         do {
-            stock = InputValidator.validateInputValue(scanner, "Nhập số lượng tồn kho:", Integer.class);
+            stock = InputValidator.validateInputValue(scanner, "Nhập số lượng tồn kho: ", Integer.class);
             if (ProductValidator.validateDataHasNotPositiveValue(stock)) {
                 System.out.println(Color.RED + "Giá sản phẩm phải là số dương" + Color.RESET);
             } else {
@@ -105,7 +107,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format("| %-" + idWidth + "d | %-" + nameWidth + "s | %-" + brandWidth + "s | %" + priceWidth + ".2f | %-" + stockWidth + "d |",
-                id, name, brand, price, stock);
+        return String.format("| %-" + idWidth + "d | %-" + nameWidth + "s | %-" + brandWidth + "s | %" + priceWidth + "s | %-" + stockWidth + "d  |",
+                id, name, brand, df.format(price), stock);
     }
 }

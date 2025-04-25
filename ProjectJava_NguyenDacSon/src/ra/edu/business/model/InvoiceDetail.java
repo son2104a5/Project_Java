@@ -8,6 +8,8 @@ import ra.edu.validate.objectValidator.ProductValidator;
 
 import java.util.Scanner;
 
+import static ra.edu.MainApplication.df;
+
 public class InvoiceDetail {
     private final ProductService productService = new ProductServiceImp();
 
@@ -74,7 +76,7 @@ public class InvoiceDetail {
         do {
             productId = InputValidator.validateInputValue(scanner, "Nhập ID sản phẩm: ", Integer.class);
             product = productService.findProductById(productId);
-            if (product == null) {
+            if (product == null || !product.isStatus()) {
                 System.out.println(Color.RED + "Không tồn tại sản phẩm có ID = " + productId + ", vui lòng nhập lại" + Color.RESET);
                 return false;
             } else if (product.getStock() == 0) {
@@ -111,7 +113,7 @@ public class InvoiceDetail {
     @Override
     public String toString() {
         Product product = productService.findProductById(productId);
-        return String.format("| %-" + idWidth + "d | %-" + invoiceIdWidth + "d | %-" + productNameWidth + "s | %" + quantityWidth + "d | %-" + unitPriceWidth + ".2f |",
-                id, invoiceId, product.getName(), quantity, unitPrice);
+        return String.format("| %-" + idWidth + "d | %-" + invoiceIdWidth + "d | %-" + productNameWidth + "s | %" + quantityWidth + "d | %-" + unitPriceWidth + "s |",
+                id, invoiceId, product.getName(), quantity, df.format(unitPrice));
     }
 }

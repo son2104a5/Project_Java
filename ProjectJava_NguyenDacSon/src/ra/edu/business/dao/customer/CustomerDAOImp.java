@@ -156,7 +156,7 @@ public class CustomerDAOImp implements CustomerDAO {
             }
             return true;
         } catch (SQLException e) {
-            System.err.println("Lỗi: " + e.getMessage() + Color.RESET);
+            System.out.println(Color.RED + "Lỗi: " + e.getMessage() + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
@@ -176,7 +176,7 @@ public class CustomerDAOImp implements CustomerDAO {
             cs.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.err.println("Không thể xóa do khách hàng này đã từng mua sản phẩm");
+            System.out.println(Color.RED + "Không thể xóa do khách hàng này đã từng mua sản phẩm" + Color.RESET);
         } catch (Exception e) {
             e.fillInStackTrace();
         } finally {
