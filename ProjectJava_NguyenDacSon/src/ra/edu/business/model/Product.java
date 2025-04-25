@@ -13,6 +13,7 @@ public class Product {
     private String brand;
     private Double price;
     private int stock;
+    private boolean status;
 
     public static int idWidth = "ID".length();
     public static int nameWidth = "Tên sản phẩm".length();
@@ -69,6 +70,14 @@ public class Product {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public void inputData(Scanner scanner, List<Product> productList) {

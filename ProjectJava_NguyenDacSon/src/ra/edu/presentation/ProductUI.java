@@ -130,7 +130,7 @@ public class ProductUI {
                                 System.out.println(Color.RED + "Giá trị nhập vào phải lớn hơn 0" + Color.RESET);
                         } while (flag);
                     }
-                    case 0 -> System.out.println("Thoát chức năng cập nhật....");
+                    case 0 -> System.out.println(Color.GREEN + "Thoát chức năng cập nhật...." + Color.RESET);
                     default ->
                             System.out.println(Color.RED + "Chức năng không hợp lệ, vui lòng nhập lại" + Color.RESET);
                 }
@@ -150,13 +150,13 @@ public class ProductUI {
 
     public void deleteProduct(Scanner scanner) {
         int id = InputValidator.validateInputValue(scanner, "Nhập ID sản phẩm muốn xóa: ", Integer.class);
-
-        if (productService.findProductById(id) != null) {
+        Product product = productService.findProductById(id);
+        if (product != null && product.isStatus()) {
             do {
                 int choice = InputValidator.validateInputValue(scanner, "Bạn thực sự muốn xóa sản phẩm này? (1: Yes, 2: No): ", Integer.class);
                 switch (choice) {
                     case 1:
-                        Product product = new Product();
+                        product = new Product();
                         product.setId(id);
                         boolean success = productService.delete(product);
                         if (success) {
@@ -166,7 +166,7 @@ public class ProductUI {
                         }
                         return;
                     case 2:
-                        System.out.println("Đã hủy xóa sản phẩm có id " + id + ".");
+                        System.out.println(Color.GREEN + "Đã hủy xóa sản phẩm có id " + id + "." + Color.RESET);
                         return;
                     default:
                         System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng nhập lại" + Color.RESET);

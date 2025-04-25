@@ -198,7 +198,7 @@ public class CustomerUI {
                         }
                         return;
                     case 2:
-                        System.out.println("Đã hủy xóa khách hàng có id " + id + ".");
+                        System.out.println(Color.GREEN + "Đã hủy xóa khách hàng có id " + id + "." + Color.RESET);
                         return;
                     default:
                         System.out.println(Color.RED + "Lựa chọn của bạn không hợp lệ, vui lòng nhập lại" + Color.RESET);

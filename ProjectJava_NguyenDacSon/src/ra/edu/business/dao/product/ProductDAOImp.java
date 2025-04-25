@@ -173,6 +173,7 @@ public class ProductDAOImp implements ProductDAO {
                 product.setBrand(rs.getString("brand"));
                 product.setPrice(rs.getDouble("price"));
                 product.setStock(rs.getInt("stock"));
+                product.setStatus(rs.getBoolean("status"));
                 return product;
             }
         } catch (SQLException e) {

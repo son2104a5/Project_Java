@@ -160,9 +160,9 @@ public class InvoiceUI {
             if (success) {
                 int choice;
                 do {
-                    System.out.println("Bạn có muốn thêm sản phẩm cho hóa đơn này không:\n" +
-                            "1. Có\n" +
-                            "0. Không");
+                    System.out.println(Color.PURPLE + "Bạn có muốn thêm sản phẩm cho hóa đơn này không:\n" +
+                            Color.CYAN + "1. Có\n" +
+                            "0. Không" + Color.RESET);
                     choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
                     switch (choice) {
                         case 1:
@@ -194,10 +194,10 @@ public class InvoiceUI {
     }
 
     public void menuFindInvoice(Scanner scanner) {
-        System.out.println("Bạn muốn tìm kiếm hóa đơn theo phương thức nào:\n" +
-                "1. Theo tên khách hàng\n" +
+        System.out.println(Color.PURPLE + "Bạn muốn tìm kiếm hóa đơn theo phương thức nào:\n" +
+                Color.CYAN + "1. Theo tên khách hàng\n" +
                 "2. Theo ngày/tháng/năm\n" +
-                "0. Quay lại menu hóa đơn");
+                "0. Quay lại menu hóa đơn" + Color.RESET);
         int choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
         switch (choice) {
             case 1:
@@ -224,9 +224,9 @@ public class InvoiceUI {
                 invoices.forEach(System.out::println);
                 TableInvoiceUtil.printInvoiceTableFooter();
 
-                System.out.println("Bạn muốn làm gì tiếp:\n" +
-                        "1. Xem chi tiết hóa đơn\n" +
-                        "0. Thoát");
+                System.out.println(Color.PURPLE + "Bạn muốn làm gì tiếp:\n" +
+                        Color.CYAN + "1. Xem chi tiết hóa đơn\n" +
+                        "0. Thoát" + Color.RESET);
                 int choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
                 switch (choice) {
                     case 1:
@@ -241,23 +241,26 @@ public class InvoiceUI {
                 }
             } while (true);
         } else {
-            System.out.println(Color.RED + "Không có khách hàng có tên " + name + Color.RESET);
+            System.out.println(Color.RED + "Không có hóa đơn của khách hàng có tên " + name + Color.RESET);
         }
     }
 
     public void findInvoiceByDateAmount(Scanner scanner) {
-        LocalDate higherDate = InputValidator.validateInputValue(scanner, "Nhập khoảng ngày tháng dưới: ", LocalDate.class);
-        LocalDate lowerDate = InputValidator.validateInputValue(scanner, "Nhập khoảng ngày tháng trên: ", LocalDate.class);
-
-        List<Invoice> invoices = invoiceService.findInvoiceByDateCreated(higherDate, lowerDate);
+        LocalDate startDate = InputValidator.validateInputValue(scanner, "Nhập khoảng thời gian bắt đầu: ", LocalDate.class);
+        LocalDate endDate = InputValidator.validateInputValue(scanner, "Nhập khoảng thời gian kết thúc: ", LocalDate.class);
+        if (startDate.isAfter(endDate)) {
+            System.out.println(Color.RED + "Khoảng kết thúc phải lớn hơn hoặc bằng khoảng bắt đầu" + Color.RESET);
+            return;
+        }
+        List<Invoice> invoices = invoiceService.findInvoiceByDateCreated(startDate, endDate);
         if (!invoices.isEmpty()) {
-            TableInvoiceUtil.printInvoiceTableHeader(invoices, "DANH SÁCH HÓA ĐƠN TỪ NGÀY " + higherDate + "ĐẾN NGÀY " + lowerDate);
+            TableInvoiceUtil.printInvoiceTableHeader(invoices, "DANH SÁCH HÓA ĐƠN TỪ NGÀY " + startDate + "ĐẾN NGÀY " + endDate);
             invoices.forEach(System.out::println);
             TableInvoiceUtil.printInvoiceTableFooter();
 
-            System.out.println("Bạn muốn làm gì tiếp:\n" +
-                    "1. Xem chi tiết hóa đơn\n" +
-                    "0. Thoát");
+            System.out.println(Color.PURPLE + "Bạn muốn làm gì tiếp:\n" +
+                    Color.CYAN + "1. Xem chi tiết hóa đơn\n" +
+                    "0. Thoát" + Color.RESET);
             int choice = InputValidator.validateInputValue(scanner, "Lựa chọn của bạn: ", Integer.class);
             switch (choice) {
                 case 1:
@@ -271,7 +274,7 @@ public class InvoiceUI {
                     break;
             }
         } else {
-            System.out.println(Color.RED + "Không có hóa đơn nằm trong khoảng từ ngày " + higherDate + " đến " + lowerDate + Color.RESET);
+            System.out.println(Color.RED + "Không có hóa đơn nằm trong khoảng từ ngày " + startDate + " đến " + endDate + Color.RESET);
         }
     }
 }
